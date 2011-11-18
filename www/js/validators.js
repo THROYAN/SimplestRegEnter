@@ -62,7 +62,7 @@ function getValidator( element, validator ) {
 		ev = element[validator];
 	}
 	
-	if (ev == null || typeof ev == 'undefined') {
+	if (ev == null || typeof ev == 'undefined' || ev == false) {
 		return;
 	}
 	
