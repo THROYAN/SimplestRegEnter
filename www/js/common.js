@@ -44,14 +44,6 @@ function toggle( element ) {
 	}
 }
 
-// проверяет email на валидность.
-// Возвращает true в случае, если переданный email валиден и наоборот.
-function isValidEmail (email)
-{
-	 email = email.replace(/^\s+|\s+$/g, ''); // удаляем пробелы
-	 return (/^([a-z0-9_\-]+\.)*[a-z0-9_\-]+@([a-z0-9][a-z0-9\-]*[a-z0-9]\.)+[a-z]{2,4}$/i).test(email);
-}
-
 // Функция помещает элемент, id, которого переданно в функцию, в центр квадратной области - rect
 // По-умолчанию rect - видимая область экрана.
 function toCenter( element, rect ) {
@@ -80,12 +72,54 @@ String.prototype.format = function() {
     return formatted;
 };
 
-function popupHint( element, message ) {
+function popupHint( element, message, className, lifeTime ) {
+	if (lifeTime == null) {
+		lifeTime = 1000;
+	}
+	
+	var ugolok = {width: 15, height: 10};
+	
+	// общий див подсказки
 	var div = document.createElement('div');
-	div.id = element.id + "_hint";
+	div.id = element.id + "-hint";
 	div.className = 'popup-hint';
-	hide(div);
-	var left;
+	div.style.position = 'absolute';
+	// позиционируем подсказку
+	div.style.left = ( position(element).x + element.offsetWidth - ugolok.width ) + "px";
+	div.style.top = ( position(element).y - ugolok.height ) + "px";
+	
+	// левая часть, в которую можно поставить картинку, например, начало облака (стрелка)
+	var left = document.createElement('span');
+	left.id = div.id + "-left";
+	left.className = div.className + '-left';
+	left.innerHTML = "&nbsp";
+	
+	// правая часть, в которую можно поставить картинку, например, конец облака (загнутые границы
+	var right = document.createElement('span');
+	right.id = div.id + "-right";
+	right.className = div.className + '-right';
+	right.innerHTML = "&nbsp";
+	
+	// средняя часть, в которой содержится само сообщение.
+	var middle = document.createElement('span');
+	middle.id = div.id + "-middle";
+	middle.className = div.className + "-middle";
+	middle.innerHTML = message;
+	
+	div.appendChild(left);
+	div.appendChild(middle);
+	div.appendChild(right);
+	
+	if (className != null) {
+		div.className += " " + className;
+	}
+	
+	var addTo = document.body;
+	addTo.appendChild(div);
+	
+	setTimeout(function(){
+		addTo.removeChild(div);
+	}, lifeTime);
 }
 
 function dumpProps(obj, parent) {
@@ -104,3 +138,12 @@ function dumpProps(obj, parent) {
        }
     }
  }
+ 
+function position (element) {
+        var p = {x: element.offsetLeft || 0, y:element.offsetTop || 0};
+        while (element = element.offsetParent) {
+            p.x += element.offsetLeft;
+            p.y += element.offsetTop;
+        }
+        return p;
+    }
