@@ -5,26 +5,43 @@ var validators = {
 			return isValidEmail( email );
 		},
 		defErrorMessage: 'Invalid email address'
-	}
+	},
 	'minLength': {
 		isValid: function( text, minLength ) {
 			return text.length >= minLength;
 		},
 		defErrorMessage: 'Minimum possible length is {0}'
+	},
+	'equals': {
+		isValid: function( text, otherField ) {
+			
+		}
 	}
 }
 
-function isValid( element ) {
+function isValidElement( element ) {
 	for ( var validator in validators ) {
-		var ev = element[validator];
+		var ev = element.getAttribute(validator);
+		
 		if ( ev != null ) {
-			if ( !validators[validator].isValid(element) ) {
+			if ( !validators[validator].isValid( element.value ) ) {
 				return ev.errorMessage != null
 					? ev.errorMessage.format( ev.value )
-					: validators[validator].defErrorMessage( ev );
+					: validators[validator].defErrorMessage.format( ev );
 			}
 		}
 	}
+	return true;
+}
+
+function isValidForm( form ) {
+	var errors = {};
+	for (var i = 0; i < form.elements.length; i++) {
+		var e = form.elements[i];
+		alert(e.name);
+		errors[e.name] = isValidElement( e );
+	}
+	return errors;
 }
 
 // Обновляет позиции некоторых динамических элементов страницы.
@@ -52,12 +69,13 @@ function reg() {
 function checkRegFields() {
 	
 	var form = $('reg-form');
+	var e = isValidForm(form);
 	
-	alert(form.email.value);
+	dumpProps(e);
 	
 	if( isValidEmail( form.email.value) ) {
-		alert('ага');
+	//	alert('ага');
 	} else {
-		alert('неа');
+	//	alert('неа');
 	}
 }

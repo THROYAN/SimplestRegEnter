@@ -25,7 +25,7 @@
 		
 			<table>
 				<tr>
-					<td>Email</td><td><input email type="text"/></td>
+					<td>Email</td><td><input email minLength="6" type="text"/></td>
 				</tr>
 				<tr>
 					<td>Password</td><td><input type="password"/></td>
@@ -40,20 +40,20 @@
 	
 	<div id="reg-dialog" class="dialog" style="visibility: hidden">
 		<div class="dialog-caption">Please enter your information</div>
-		<form id="reg-form" onsubmit="checkRegFields();return false;" method="POST">
+		<form id="reg-form" action="#" onsubmit="checkRegFields();return false;" method="POST">
 		
 			<table>
 				<tr>
-					<td>Name</td><td><input name="name" type="text"/></td>
+					<td>Name</td><td><input name="name" type="text" startsWithAlpha minLength="4" maxLength="26"/></td>
 				</tr>
 				<tr>
-					<td>Email</td><td><input name="email" type="text"/></td>
+					<td>Email</td><td><input name="email" email type="text"/></td>
 				</tr>
 				<tr>
-					<td>Password</td><td><input type="password"/></td>
+					<td>Password</td><td><input name="password" minLength="6" type="password"/></td>
 				</tr>
 				<tr>
-					<td>Re-type password</td><td><input type="password"/></td>
+					<td>Re-type password</td><td><input name="re-type-password" equals="password" type="password"/></td>
 				</tr>
 			</table>
 			<input type="submit" value="OK">
