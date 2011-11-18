@@ -22,20 +22,25 @@ function $( id ) {
 	return document.getElementById( id );
 }
 
-// скрыть элемент по id
+// явл€етс€ ли объект скрытым
+function isHidden( element ) {
+	return element.style.display == 'none';
+}
+
+// скрыть элемент
 function hide( element ) {
-	element.style.visibility = 'hidden';
+	element.style.display = 'none';
 }
-// показать скрытый элемент по id
+// показать скрытый элемент
 function show( element ) {
-	element.style.visibility = 'visible';
+	element.style.display = 'block';
 }
-// показывает скрытый или скрывает отображаемый элемент по id
+// показывает скрытый или скрывает отображаемый элемент
 function toggle( element ) {
-	if (element.style.visibility == 'hidden') {
-		element.style.visibility = 'visible';
+	if (isHidden(element)) {
+		show(element);
 	} else {
-		element.style.visibility = 'hidden';
+		hide(element);
 	}
 }
 
@@ -75,9 +80,12 @@ String.prototype.format = function() {
     return formatted;
 };
 
-function popupHint( id, message ) {
+function popupHint( element, message ) {
 	var div = document.createElement('div');
-	div.id = "";
+	div.id = element.id + "_hint";
+	div.className = 'popup-hint';
+	hide(div);
+	var left;
 }
 
 function dumpProps(obj, parent) {

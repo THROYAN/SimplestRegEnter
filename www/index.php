@@ -8,6 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="css/default.css" />
 	
 	<script type="text/javascript" src="js/common.js"></script>
+	<script type="text/javascript" src="js/validators.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
     
 </head>
@@ -19,7 +20,7 @@
 		<a onclick="reg()" href="#">Register</a>
 	</div>
 	
-	<div id="enter-dialog" class="dialog" style="visibility: hidden">
+	<div id="enter-dialog" class="dialog" style="display: none">
 		<div class="dialog-caption">Please enter your email and password</div>
 		<form>
 		
@@ -38,7 +39,7 @@
 		
 	</div>
 	
-	<div id="reg-dialog" class="dialog" style="visibility: hidden">
+	<div id="reg-dialog" class="dialog" style="display: none">
 		<div class="dialog-caption">Please enter your information</div>
 		<form id="reg-form" action="#" onsubmit="checkRegFields();return false;" method="POST">
 		
