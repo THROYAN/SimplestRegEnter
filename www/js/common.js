@@ -9,7 +9,7 @@ function getClientHeight()
 }
 
 function placeTopBar() { // помещает элемент #user-panel на верх страницы
-	userPanel = 'user-panel';
+	var userPanel = 'user-panel';
 	if (!document.all) {// For Mozilla etc.
 		$( userPanel ).style.top = window.pageYOffset + "px";
 	} else {// For the IE...
@@ -23,19 +23,19 @@ function $( id ) {
 }
 
 // скрыть элемент по id
-function hide( id ) {
-	$( id ).style.visibility = 'hidden';
+function hide( element ) {
+	element.style.visibility = 'hidden';
 }
 // показать скрытый элемент по id
-function show( id ) {
-	$( id ).style.visibility = 'visible';
+function show( element ) {
+	element.style.visibility = 'visible';
 }
 // показывает скрытый или скрывает отображаемый элемент по id
-function toggle( id ) {
-	if ($( id ).style.visibility == 'hidden') {
-		$( id ).style.visibility = 'visible';
+function toggle( element ) {
+	if (element.style.visibility == 'hidden') {
+		element.style.visibility = 'visible';
 	} else {
-		$( id ).style.visibility = 'hidden';
+		element.style.visibility = 'hidden';
 	}
 }
 
@@ -49,7 +49,7 @@ function isValidEmail (email)
 
 // Функция помещает элемент, id, которого переданно в функцию, в центр квадратной области - rect
 // По-умолчанию rect - видимая область экрана.
-function toCenter( id, rect ) {
+function toCenter( element, rect ) {
 	
 	if ( rect == null ) {
 		rect = {
@@ -60,8 +60,8 @@ function toCenter( id, rect ) {
 		}
 	}
 
-	$( id ).style.left = (rect.x + (rect.width - $( id ).offsetWidth) / 2) + "px";
-	$( id ).style.top = (rect.y + (rect.height - $( id ).offsetHeight) / 2) + "px";
+	element.style.left = (rect.x + (rect.width - element.offsetWidth) / 2) + "px";
+	element.style.top = (rect.y + (rect.height - element.offsetHeight) / 2) + "px";
 }
 
 // Добавляет к прототипу String метод format
@@ -75,7 +75,7 @@ String.prototype.format = function() {
     return formatted;
 };
 
-function alt( id, message ) {
+function popupHint( id, message ) {
 	var div = document.createElement('div');
 	div.id = "";
 }
