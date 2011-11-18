@@ -11,6 +11,13 @@ function refreshPositions() {
 	window.setTimeout("refreshPositions()", 100); // обновляем каждую 0.1 секунды
 }
 
+function setValidators() {
+	var form = $('reg-form');
+	
+	addValidator( form.email, 'email' );
+	addValidator( form.name, 'minLength', { value: 4, errorMessage: 'Имя должно быть не короче {0} символов' });
+}
+
 // Свернуть reg диалог и свернуть/показать enter диалог
 // Нажатие на Enter(Вход)
 function enter() {
@@ -29,7 +36,11 @@ function reg() {
 function checkRegFields() {
 	
 	var form = $('reg-form');
-	if (isValidForm(form))
-		alert('ya');
+	if (!isValidForm(form)) {
+		var errors = formErrors( form );
+		for (var e in errors) {
+			popupHint( form.elements[e], errors[e][0], 'error-message', 1000 );
+		}
+	}
 		
 }

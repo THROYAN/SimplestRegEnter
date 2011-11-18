@@ -13,7 +13,7 @@
     
 </head>
 
-<body onload="refreshPositions();">
+<body onload="refreshPositions(); setValidators();">
 	
 	<div class="user-panel" id="user-panel">
 		<a onclick="enter()" href="#">Enter</a>|
@@ -26,14 +26,14 @@
 		
 			<table>
 				<tr>
-					<td>Email</td><td><input email minLength="6" type="text"/></td>
+					<td>Email</td><td><input type="text"/></td>
 				</tr>
 				<tr>
 					<td>Password</td><td><input type="password"/></td>
 				</tr>
 			</table>
 			<input type="submit" value="OK">
-			<button onclick="hide('enter-dialog')">Cancel</button>
+			<button onclick="hide($('enter-dialog'))">Cancel</button>
 		
 		</form>
 		
@@ -41,24 +41,24 @@
 	
 	<div id="reg-dialog" class="dialog" style="display: none">
 		<div class="dialog-caption">Please enter your information</div>
-		<form id="reg-form" action="#" onsubmit="checkRegFields();return false;" method="POST">
+		<form id="reg-form" action="#" onsubmit="checkRegFields();return false;" method="POST" novalidate>
 		
 			<table>
 				<tr>
-					<td>Name</td><td><input name="name" type="text" startsWithAlpha minLength="4" maxLength="26"/></td>
+					<td>Name</td><td><input required name="name" type="text" maxLength="26"/></td>
 				</tr>
 				<tr>
-					<td>Email</td><td><input name="email" email type="text"/></td>
+					<td>Email</td><td><input required name="email" type="text"/></td>
 				</tr>
 				<tr>
-					<td>Password</td><td><input name="password" minLength="6" type="password"/></td>
+					<td>Password</td><td><input required name="password" minLength="6" type="password"/></td>
 				</tr>
 				<tr>
 					<td>Re-type password</td><td><input name="re-type-password" equals="password" type="password"/></td>
 				</tr>
 			</table>
 			<input type="submit" value="OK">
-			<button onclick="hide('reg-dialog')">Cancel</button>
+			<button onclick="hide($('reg-dialog'))">Cancel</button>
 		
 		</form>
 		

@@ -1,5 +1,11 @@
 // Перечень стандартных валидаторов.
 var validators = {
+	'required': {
+		isValid: function( e ) {
+			return e.value != null && e.value.length > 0;
+		},
+		defErrorMessage: 'Field can\'t be emplty'
+	},
 	'email': {
 		isValid: function( e ) {
 			e.value = e.value.replace(/^\s+|\s+$/g, ''); // удаляем пробелы
@@ -30,12 +36,6 @@ var validators = {
 			return e.value == e.form.elements[otherField].value;
 		},
 		defErrorMessage: 'Value must be equals with \'{0}\' field'
-	},
-	'required': {
-		isValide: function( e ) {
-			return e.value != null && e.value.length > 0;
-		},
-		defErrorMessage: 'Field can\'t be emplty'
 	}
 }
 
