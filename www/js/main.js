@@ -14,7 +14,7 @@ function refreshPositions() {
 function setValidators() {
 	var form = $('reg-form');
 	
-	addValidator( form.email, 'email' );
+	addValidator( form.email, 'email', { errorMessage: 'Неверный формат email адреса' } );
 	addValidator( form.name, 'minLength', { value: 4, errorMessage: 'Имя должно быть не короче {0} символов' });
 }
 
@@ -34,13 +34,25 @@ function reg() {
 
 // Проверка на корректность ввода полей регистрационной формы.
 function checkRegFields() {
-	
+
 	var form = $('reg-form');
 	if (!isValidForm(form)) {
 		var errors = formErrors( form );
 		for (var e in errors) {
 			popupHint( form.elements[e], errors[e][0], 'error-message', 1000 );
 		}
-	}
+	} else {
+	
+		var userData = {
+			email: form.email.value,
+			name: form.name.value,
+			password: form.password.value
+		};
 		
+		post( '/controllers/users.php', userData, function( data ){
+			dumpProps(data);
+		}, function( data ){
+			alert( 'Error:' + data );
+		});
+	}
 }
