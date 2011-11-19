@@ -1,38 +1,38 @@
-// Обновляет позиции некоторых динамических элементов страницы.
+// РћР±РЅРѕРІР»СЏРµС‚ РїРѕР·РёС†РёРё РЅРµРєРѕС‚РѕСЂС‹С… РґРёРЅР°РјРёС‡РµСЃРєРёС… СЌР»РµРјРµРЅС‚РѕРІ СЃС‚СЂР°РЅРёС†С‹.
 function refreshPositions() {
-	placeTopBar(); // помещаем верхнюю панельку наверх.
+	placeTopBar(); // РїРѕРјРµС‰Р°РµРј РІРµСЂС…РЅСЋСЋ РїР°РЅРµР»СЊРєСѓ РЅР°РІРµСЂС….
 	if (!isHidden( $('enter-dialog') )) {
-		toCenter( $('enter-dialog') ); // центрируем диалоги
+		toCenter( $('enter-dialog') ); // С†РµРЅС‚СЂРёСЂСѓРµРј РґРёР°Р»РѕРіРё
 	}
 	if (!isHidden( $('reg-dialog') )) {
-		toCenter( $('reg-dialog') );   // входа и регистрации
+		toCenter( $('reg-dialog') );   // РІС…РѕРґР° Рё СЂРµРіРёСЃС‚СЂР°С†РёРё
 	}
 	
-	window.setTimeout("refreshPositions()", 100); // обновляем каждую 0.1 секунды
+	window.setTimeout("refreshPositions()", 100); // РѕР±РЅРѕРІР»СЏРµРј РєР°Р¶РґСѓСЋ 0.1 СЃРµРєСѓРЅРґС‹
 }
 
 function setValidators() {
 	var form = $('reg-form');
 	
-	addValidator( form.email, 'email', { errorMessage: 'Неверный формат email адреса' } );
-	addValidator( form.name, 'minLength', { value: 4, errorMessage: 'Имя должно быть не короче {0} символов' });
+	addValidator( form.email, 'email', { errorMessage: 'РќРµРІРµСЂРЅС‹Р№ С„РѕСЂРјР°С‚ email Р°РґСЂРµСЃР°' } );
+	addValidator( form.name, 'minLength', { value: 4, errorMessage: 'РРјСЏ РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РЅРµ РєРѕСЂРѕС‡Рµ {0} СЃРёРјРІРѕР»РѕРІ' });
 }
 
-// Свернуть reg диалог и свернуть/показать enter диалог
-// Нажатие на Enter(Вход)
+// РЎРІРµСЂРЅСѓС‚СЊ reg РґРёР°Р»РѕРі Рё СЃРІРµСЂРЅСѓС‚СЊ/РїРѕРєР°Р·Р°С‚СЊ enter РґРёР°Р»РѕРі
+// РќР°Р¶Р°С‚РёРµ РЅР° Enter(Р’С…РѕРґ)
 function enter() {
 	hide($('reg-dialog'));
 	toggle($('enter-dialog'));
 }
 
-// Свернуть enter диалог и свернуть/показать reg диалог
-// Нажатие на Register(Регистрация)
+// РЎРІРµСЂРЅСѓС‚СЊ enter РґРёР°Р»РѕРі Рё СЃРІРµСЂРЅСѓС‚СЊ/РїРѕРєР°Р·Р°С‚СЊ reg РґРёР°Р»РѕРі
+// РќР°Р¶Р°С‚РёРµ РЅР° Register(Р РµРіРёСЃС‚СЂР°С†РёСЏ)
 function reg() {
 	hide($('enter-dialog'));
 	toggle($('reg-dialog'));
 }
 
-// Проверка на корректность ввода полей регистрационной формы.
+// РџСЂРѕРІРµСЂРєР° РЅР° РєРѕСЂСЂРµРєС‚РЅРѕСЃС‚СЊ РІРІРѕРґР° РїРѕР»РµР№ СЂРµРіРёСЃС‚СЂР°С†РёРѕРЅРЅРѕР№ С„РѕСЂРјС‹.
 function checkRegFields() {
 
 	var form = $('reg-form');
@@ -49,8 +49,8 @@ function checkRegFields() {
 			password: form.password.value
 		};
 		
-		post( '/controllers/users.php', userData, function( data ){
-			dumpProps(data);
+		post( '/controllers/users.php', {'action': 'reg', 'userData': userData}, function( data ){
+			alert(data);
 		}, function( data ){
 			alert( 'Error:' + data );
 		});

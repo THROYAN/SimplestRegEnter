@@ -8,7 +8,7 @@ function getClientHeight()
   return document.compatMode=='CSS1Compat' && !window.opera ? document.documentElement.clientHeight : document.body.clientHeight;
 }
 
-function placeTopBar() { // помещает элемент #user-panel на верх страницы
+function placeTopBar() { // РїРѕРјРµС‰Р°РµС‚ СЌР»РµРјРµРЅС‚ #user-panel РЅР° РІРµСЂС… СЃС‚СЂР°РЅРёС†С‹
 	var userPanel = 'user-panel';
 	if (!document.all) {// For Mozilla etc.
 		$( userPanel ).style.top = window.pageYOffset + "px";
@@ -17,25 +17,25 @@ function placeTopBar() { // помещает элемент #user-panel на верх страницы
 	}
 }
 
-// функция возвращает элемент по id
+// С„СѓРЅРєС†РёСЏ РІРѕР·РІСЂР°С‰Р°РµС‚ СЌР»РµРјРµРЅС‚ РїРѕ id
 function $( id ) {
 	return document.getElementById( id );
 }
 
-// Является ли объект скрытым
+// РЇРІР»СЏРµС‚СЃСЏ Р»Рё РѕР±СЉРµРєС‚ СЃРєСЂС‹С‚С‹Рј
 function isHidden( element ) {
 	return element.style.display == 'none';
 }
 
-// скрыть элемент
+// СЃРєСЂС‹С‚СЊ СЌР»РµРјРµРЅС‚
 function hide( element ) {
 	element.style.display = 'none';
 }
-// показать скрытый элемент
+// РїРѕРєР°Р·Р°С‚СЊ СЃРєСЂС‹С‚С‹Р№ СЌР»РµРјРµРЅС‚
 function show( element ) {
 	element.style.display = 'block';
 }
-// показывает скрытый или скрывает отображаемый элемент
+// РїРѕРєР°Р·С‹РІР°РµС‚ СЃРєСЂС‹С‚С‹Р№ РёР»Рё СЃРєСЂС‹РІР°РµС‚ РѕС‚РѕР±СЂР°Р¶Р°РµРјС‹Р№ СЌР»РµРјРµРЅС‚
 function toggle( element ) {
 	if (isHidden(element)) {
 		show(element);
@@ -44,8 +44,8 @@ function toggle( element ) {
 	}
 }
 
-// Функция помещает элемент, id, которого переданно в функцию, в центр квадратной области - rect
-// По-умолчанию rect - видимая область экрана.
+// Р¤СѓРЅРєС†РёСЏ РїРѕРјРµС‰Р°РµС‚ СЌР»РµРјРµРЅС‚, id, РєРѕС‚РѕСЂРѕРіРѕ РїРµСЂРµРґР°РЅРЅРѕ РІ С„СѓРЅРєС†РёСЋ, РІ С†РµРЅС‚СЂ РєРІР°РґСЂР°С‚РЅРѕР№ РѕР±Р»Р°СЃС‚Рё - rect
+// РџРѕ-СѓРјРѕР»С‡Р°РЅРёСЋ rect - РІРёРґРёРјР°СЏ РѕР±Р»Р°СЃС‚СЊ СЌРєСЂР°РЅР°.
 function toCenter( element, rect ) {
 	
 	if ( rect == null ) {
@@ -61,8 +61,8 @@ function toCenter( element, rect ) {
 	element.style.top = (rect.y + (rect.height - element.offsetHeight) / 2) + "px";
 }
 
-// Добавляет к прототипу String метод format
-// Метод аналогичен методу String.Format() в C#
+// Р”РѕР±Р°РІР»СЏРµС‚ Рє РїСЂРѕС‚РѕС‚РёРїСѓ String РјРµС‚РѕРґ format
+// РњРµС‚РѕРґ Р°РЅР°Р»РѕРіРёС‡РµРЅ РјРµС‚РѕРґСѓ String.Format() РІ C#
 String.prototype.format = function() {
     var formatted = this;
     for (var i = 0; i < arguments.length; i++) {
@@ -79,28 +79,28 @@ function popupHint( element, message, className, lifeTime ) {
 	
 	var ugolok = {width: 15, height: 10};
 	
-	// общий див подсказки
+	// РѕР±С‰РёР№ РґРёРІ РїРѕРґСЃРєР°Р·РєРё
 	var div = document.createElement('div');
 	div.id = element.id + "-hint";
 	div.className = 'popup-hint';
 	div.style.position = 'absolute';
-	// позиционируем подсказку
+	// РїРѕР·РёС†РёРѕРЅРёСЂСѓРµРј РїРѕРґСЃРєР°Р·РєСѓ
 	div.style.left = ( position(element).x + element.offsetWidth - ugolok.width ) + "px";
 	div.style.top = ( position(element).y - ugolok.height ) + "px";
 	
-	// левая часть, в которую можно поставить картинку, например, начало облака (стрелка)
+	// Р»РµРІР°СЏ С‡Р°СЃС‚СЊ, РІ РєРѕС‚РѕСЂСѓСЋ РјРѕР¶РЅРѕ РїРѕСЃС‚Р°РІРёС‚СЊ РєР°СЂС‚РёРЅРєСѓ, РЅР°РїСЂРёРјРµСЂ, РЅР°С‡Р°Р»Рѕ РѕР±Р»Р°РєР° (СЃС‚СЂРµР»РєР°)
 	var left = document.createElement('span');
 	left.id = div.id + "-left";
 	left.className = div.className + '-left';
 	left.innerHTML = "&nbsp";
 	
-	// правая часть, в которую можно поставить картинку, например, конец облака (загнутые границы
+	// РїСЂР°РІР°СЏ С‡Р°СЃС‚СЊ, РІ РєРѕС‚РѕСЂСѓСЋ РјРѕР¶РЅРѕ РїРѕСЃС‚Р°РІРёС‚СЊ РєР°СЂС‚РёРЅРєСѓ, РЅР°РїСЂРёРјРµСЂ, РєРѕРЅРµС† РѕР±Р»Р°РєР° (Р·Р°РіРЅСѓС‚С‹Рµ РіСЂР°РЅРёС†С‹
 	var right = document.createElement('span');
 	right.id = div.id + "-right";
 	right.className = div.className + '-right';
 	right.innerHTML = "&nbsp";
 	
-	// средняя часть, в которой содержится само сообщение.
+	// СЃСЂРµРґРЅСЏСЏ С‡Р°СЃС‚СЊ, РІ РєРѕС‚РѕСЂРѕР№ СЃРѕРґРµСЂР¶РёС‚СЃСЏ СЃР°РјРѕ СЃРѕРѕР±С‰РµРЅРёРµ.
 	var middle = document.createElement('span');
 	middle.id = div.id + "-middle";
 	middle.className = div.className + "-middle";

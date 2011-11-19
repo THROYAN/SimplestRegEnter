@@ -42,7 +42,7 @@
 	
 	<div id="reg-dialog" class="dialog" style="display: none">
 		<div class="dialog-caption">Please enter your information</div>
-		<!-- Óñòàíàâëèâàåì äëÿ ôîðìû àòòðèáóò novalidate ÷òîáû îòêëþ÷èòü HTML5 âàëèäàöèþ -->
+		<!-- Ð£ÑÑ‚Ð°Ð½Ð°Ð²Ð»Ð¸Ð²Ð°ÐµÐ¼ Ð´Ð»Ñ Ñ„Ð¾Ñ€Ð¼Ñ‹ Ð°Ñ‚Ñ‚Ñ€Ð¸Ð±ÑƒÑ‚ novalidate Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð¾Ñ‚ÐºÐ»ÑŽÑ‡Ð¸Ñ‚ÑŒ HTML5 Ð²Ð°Ð»Ð¸Ð´Ð°Ñ†Ð¸ÑŽ -->
 		<form id="reg-form" action="#" onsubmit="checkRegFields();return false;" method="POST" novalidate>
 		
 			<table>

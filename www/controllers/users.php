@@ -1,26 +1,26 @@
 <?php
 	// require_once '../system/connect_to_db.php';
 	
-	$data = $_POST['data'];
-	$data2 = json_decode($data);
-	$json = '{"a":1,"b":2,"c":3,"d":4,"e":5}';
-	$data3 = json_decode($json);
-	$action = $data['action'];
+	// Все запросы приходят в виде одного параметра data, который сам по себе json объект, в котором все параметры.
+	$data = json_decode($_POST['data']);
 	
-	switch( action )
+	$action = $data->action;
+	
+	switch( $action )
 	{
 		case 'reg':
 			
-			$userData = $data['userData'];
+			$userData = $data->userData;
 			
 			echo json_encode( array(
 						'status' => 'succesful'
 			));
 			break;
-	}
-	echo json_encode( array(
+		default:
+			echo json_encode( array(
 						'data' => $data,
-						'data2' => $data2,
-						'data3' => $data3
+						'action' => $action
 			));
+			break;
+	}
 ?>
