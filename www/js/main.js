@@ -66,3 +66,20 @@ function checkRegFields() {
         });
     }
 }
+
+function checkPassword() {
+    
+    var form = $('enter-form');
+    
+    post('/controllers/users.php', {'action': 'enter', 'password': form.password.value, 'email': form.email.value}, function( data ) {
+        if (data.status == 'succesful') {
+            popupHint( $('enter-caption'), data.message );
+            setTimeout(function(){
+                    form.reset();
+                    hide($('enter-dialog'));
+                }, 1000);
+        } else {
+            popupHint( form.password, data.message );
+        }
+    });
+}

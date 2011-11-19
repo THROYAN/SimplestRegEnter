@@ -108,6 +108,28 @@
         }
 
         /**
+         * Проверяет соответсвует ли пароль данному email адресу.
+         * Если существует, то возвращает пользователя,
+         * в противном случае null
+         *
+         * @param string $email
+         * @param string $password
+         * @return User|null
+         */
+        public function getByEmailAndPassword($email, $password) {
+
+            $result = queryResultsAsArray( query('SELECT * FROM '.User::table.
+                    ' WHERE email = \'{0}\' AND
+                            password = MD5(\'{1}\')
+                            LIMIT 1',
+                    $email,
+                    $password
+            ));
+
+            return count($result) == 0 ? null : $result[0];
+        }
+
+        /**
          *          Создание записи пользователя в БД.
          * Перед записью все поля проходят валидацию. Запись создаётся только
          * тогда, когда все поля корректны.
@@ -141,11 +163,12 @@
                 $userData->name,
                 $userData->birth
             );
+            $this->load(mysql_insert_id());
 
             return array(
                 'status' => 'succesful',
                 'message' => 'Вы успешно зарегестрировались',
-                'user' => $this->load(mysql_insert_id())
+                'user' => $this->serialize()
             );
         }
 
