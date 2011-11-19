@@ -9,6 +9,7 @@
 	
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript" src="js/validators.js"></script>
+	<script type="text/javascript" src="js/ajax.js"></script>
 	<script type="text/javascript" src="js/main.js"></script>
     
 </head>
@@ -41,6 +42,7 @@
 	
 	<div id="reg-dialog" class="dialog" style="display: none">
 		<div class="dialog-caption">Please enter your information</div>
+		<!-- Устанавливаем для формы аттрибут novalidate чтобы отключить HTML5 валидацию -->
 		<form id="reg-form" action="#" onsubmit="checkRegFields();return false;" method="POST" novalidate>
 		
 			<table>
