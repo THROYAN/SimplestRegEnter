@@ -4,7 +4,7 @@ var validators = {
         isValid: function( e ) {
             return e.value != null && e.value.length > 0;
         },
-        defErrorMessage: 'Field can\'t be emplty'
+        defErrorMessage: 'Field can\'t be empty'
     },
     'email': {
         isValid: function( e ) {
@@ -62,9 +62,11 @@ function getValidator( element, validator ) {
         ev = element[validator];
     }
 
-    if (ev == null || typeof ev == 'undefined' || ev == false) {
+    if (ev == null || typeof ev == 'undefined' || (ev == false && typeof ev == 'boolean') ) {
+
         return;
     }
+
 
     var value = ev;
     if( ev.value != null) {
