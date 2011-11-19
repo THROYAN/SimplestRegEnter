@@ -1,63 +1,63 @@
 #user-panel {
-	position: absolute;
-	left: 0px;
-	top: 0px;
-	width: 100%;
-	height: 20px;
-	background-color: #aaa;
-	color: black;
-	border-bottom: 1px solid black;
-	float: left;
-	z-index: 49;
-	text-align: right;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 20px;
+    background-color: #aaa;
+    color: black;
+    border-bottom: 1px solid black;
+    float: left;
+    z-index: 49;
+    text-align: right;
 }
 
 #user-panel:hover {
-	background-color: black;
-	color: #aaa;
+    background-color: black;
+    color: #aaa;
 }
 
 #user-panel a:visited , #user-panel a:link {
-	color: black;
-	text-decoration: none;
+    color: black;
+    text-decoration: none;
 }
 
 #user-panel:hover a:visited, #user-panel:hover a:link {
-	color: #aaa;
-	text-decoration: none;
+    color: #aaa;
+    text-decoration: none;
 }
 
 .dialog {
-	position: absolute;
-	border: solid 1px #aaa;
-	background-color: #ccc;
+    position: absolute;
+    border: solid 1px #aaa;
+    background-color: #ccc;
 }
 
 .dialog-caption {
-	text-align: center;
-	margin: 5px 5px 15px 5px;
-	border: solid 2px white;
-	color: white;
-	background-color: #000
+    text-align: center;
+    margin: 5px 5px 15px 5px;
+    border: solid 2px white;
+    color: white;
+    background-color: #000
 }
 
 .popup-hint {
-	#border: solid 1px #aaa;
-	#background-color: #ccc;
+    #border: solid 1px #aaa;
+    #background-color: #ccc;
 }
 .popup-hint-left {
-	padding-left: 13px;
-	background-image: url(/images/cloud_left.gif);
+    padding-left: 13px;
+    background-image: url(/images/cloud_left.gif);
 }
 
 .popup-hint-right {
-	padding-left: 5px;
-	background-image: url(/images/cloud_right.gif);
+    padding-left: 5px;
+    background-image: url(/images/cloud_right.gif);
 }
 .popup-hint-middle {
-	background-image: url(/images/cloud_middle.gif);
+    background-image: url(/images/cloud_middle.gif);
 }
 
 .error-message {
-	color: red;
+    color: red;
 }

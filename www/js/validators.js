@@ -1,145 +1,145 @@
-// ÐŸÐµÑ€ÐµÑ‡ÐµÐ½ÑŒ ÑÑ‚Ð°Ð½Ð´Ð°Ñ€Ñ‚Ð½Ñ‹Ñ… Ð²Ð°Ð»Ð¸Ð´Ð°Ñ‚Ð¾Ñ€Ð¾Ð².
+// Ïåðå÷åíü ñòàíäàðòíûõ âàëèäàòîðîâ.
 var validators = {
-	'required': {
-		isValid: function( e ) {
-			return e.value != null && e.value.length > 0;
-		},
-		defErrorMessage: 'Field can\'t be emplty'
-	},
-	'email': {
-		isValid: function( e ) {
-			e.value = e.value.replace(/^\s+|\s+$/g, ''); // ÑƒÐ´Ð°Ð»ÑÐµÐ¼ Ð¿Ñ€Ð¾Ð±ÐµÐ»Ñ‹
-			return (/^([a-z0-9_\-]+\.)*[a-z0-9_\-]+@([a-z0-9][a-z0-9\-]*[a-z0-9]\.)+[a-z]{2,4}$/i).test(e.value);
-		},
-		defErrorMessage: 'Invalid email address'
-	},
-	'minLength': {
-		isValid: function( e, minLength ) {
-			return e.value.length >= parseInt( minLength );
-		},
-		defErrorMessage: 'Minimum possible length is {0}'
-	},
-	'maxLength': {
-		isValid: function( e, maxLength ) {
-			return e.value.length <= parseInt( maxLength );
-		},
-		defErrorMessage: 'Maximum possible length is {0}'
-	},
-	'startsWithAlpha': {
-		isValid: function( e ) {
-			return (/^[a-z]+/i).test(e.value);
-		},
-		defErrorMessage: 'This field must starts with alpha'
-	},
-	'equals': {
-		isValid: function( e, otherField ) {
-			return e.value == e.form.elements[otherField].value;
-		},
-		defErrorMessage: 'Value must be equals with \'{0}\' field'
-	}
+    'required': {
+        isValid: function( e ) {
+            return e.value != null && e.value.length > 0;
+        },
+        defErrorMessage: 'Field can\'t be emplty'
+    },
+    'email': {
+        isValid: function( e ) {
+            // e.value = e.value.replace(/^\s+|\s+$/g, ''); // óäàëÿåì ïðîáåëû
+            return (/^([a-z0-9_\-]+\.)*[a-z0-9_\-]+@([a-z0-9][a-z0-9\-]*[a-z0-9]\.)+[a-z]{2,4}$/i).test(e.value);
+        },
+        defErrorMessage: 'Invalid email address'
+    },
+    'minLength': {
+        isValid: function( e, minLength ) {
+            return e.value.length >= parseInt( minLength );
+        },
+        defErrorMessage: 'Minimum possible length is {0}'
+    },
+    'maxLength': {
+        isValid: function( e, maxLength ) {
+            return e.value.length <= parseInt( maxLength );
+        },
+        defErrorMessage: 'Maximum possible length is {0}'
+    },
+    'startsWithAlpha': {
+        isValid: function( e ) {
+            return (/^[a-z]+/i).test(e.value);
+        },
+        defErrorMessage: 'This field must starts with alpha'
+    },
+    'equals': {
+        isValid: function( e, otherField ) {
+            return e.value == e.form.elements[otherField].value;
+        },
+        defErrorMessage: 'Value must be equals with \'{0}\' field'
+    }
 }
 
-// Ñ„ÑƒÐºÐ½Ñ†Ð¸Ñ Ð´Ð»Ñ Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¸Ñ Ð¾Ð´Ð½Ð¾Ð³Ð¾ Ð²Ð°Ð»Ð¸Ð´Ð°Ñ‚Ð¾Ñ€Ð° Ð½Ð° ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ðµ.
+// ôóêíöèÿ äëÿ âûïîëíåíèÿ îäíîãî âàëèäàòîðà íà ýëåìåíòå.
 function validate( e, validator ) {
-	var ev = getValidator( e, validator );
-	
-	if ( ev != null ) {
-		
-		// Ð¿Ñ€Ð¾Ð²ÐµÑ€ÑÐµÐ¼ Ð²Ð°Ð»Ð¸Ð´Ð°Ñ‚Ð¾Ñ€, ÐµÑÐ»Ð¸ Ð¾Ð½ Ð½Ðµ Ð¿Ñ€Ð¾Ñ…Ð¾Ð´Ð¸Ñ‚, Ñ‚Ð¾ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÐ¼ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ðµ Ð¾Ð± Ð¾ÑˆÐ¸Ð±ÐºÐµ.
-		if ( !validators[validator].isValid( e, ev.value ) ) {
-			return ev.message.format(ev.value);
-		}
-	}
-	return true;
+    var ev = getValidator( e, validator );
+
+    if ( ev != null ) {
+
+        // ïðîâåðÿåì âàëèäàòîð, åñëè îí íå ïðîõîäèò, òî âîçâðàùàåì ñîîáùåíèå îá îøèáêå.
+        if ( !validators[validator].isValid( e, ev.value ) ) {
+            return ev.message.format(ev.value);
+        }
+    }
+    return true;
 }
 
-// Ð’Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÑ‚ Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ñ‹ Ð²Ð°Ð»Ð¸Ð´Ð°Ñ‚Ð¾Ñ€Ð° ÐºÐ¾Ð½ÐºÑ€ÐµÑ‚Ð½Ð¾Ð³Ð¾ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð°.
+// Âîçâðàùàåò ïàðàìåòðû âàëèäàòîðà êîíêðåòíîãî ýëåìåíòà.
 function getValidator( element, validator ) {
-	// Ð”Ð¾Ð¿ÑƒÑÐºÐ°ÐµÑ‚ÑÑ Ð²Ð°Ð»Ð¸Ð´Ð°Ñ†Ð¸Ñ Ð² Ð²Ð¸Ð´Ðµ addValidator(element, 'minLength', {value = 16, errorMessage = 'Ð”Ð»Ð¸Ð½Ð° Ð´Ð¾Ð»Ð¶Ð½Ð° Ð±Ñ‹Ñ‚ÑŒ Ð½Ðµ Ð¼ÐµÐ½ÑŒÑˆÐµ {0}' });
-	// Ð¸Ð»Ð¸ Ð² Ð²Ð¸Ð´Ðµ html Ð°Ñ‚Ñ‚Ñ€Ð¸Ð±ÑƒÑ‚Ð¾Ð².
-	var ev = element.getAttribute(validator);
-	if (ev == null) {
-		ev = element[validator];
-	}
-	
-	if (ev == null || typeof ev == 'undefined' || ev == false) {
-		return;
-	}
-	
-	var value = ev;
-	if( ev.value != null) {
-		value = ev.value;
-	}
-	
-	// Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÐ¼ Ð»Ð¸Ð±Ð¾ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ðµ Ð¾Ð± Ð¾ÑˆÐ¸Ð±ÐºÐµ Ð¿Ð¾-ÑƒÐ¼Ð¾Ð»Ñ‡Ð°Ð½Ð¸ÑŽ,
-	// Ð»Ð¸Ð±Ð¾ Ñ‚Ð¾, ÐºÐ¾Ñ‚Ð¾Ñ€Ð¾Ðµ Ð¼Ñ‹ ÑƒÐºÐ°Ð·Ð°Ð»Ð¸ Ð² Ð¼ÐµÑ‚Ð¾Ð´Ðµ addValidator
-	if( ev.errorMessage != null ) {
-		return { value: value, message: ev.errorMessage };
-	} else {
-		return { value: value, message: validators[validator].defErrorMessage };
-	}
+    // Äîïóñêàåòñÿ âàëèäàöèÿ â âèäå addValidator(element, 'minLength', {value = 16, errorMessage = 'Äëèíà äîëæíà áûòü íå ìåíüøå {0}' });
+    // èëè â âèäå html àòòðèáóòîâ.
+    var ev = element.getAttribute(validator);
+    if (ev == null) {
+        ev = element[validator];
+    }
+
+    if (ev == null || typeof ev == 'undefined' || ev == false) {
+        return;
+    }
+
+    var value = ev;
+    if( ev.value != null) {
+        value = ev.value;
+    }
+
+    // âîçâðàùàåì ëèáî ñîîáùåíèå îá îøèáêå ïî-óìîë÷àíèþ,
+    // ëèáî òî, êîòîðîå ìû óêàçàëè â ìåòîäå addValidator
+    if( ev.errorMessage != null ) {
+        return { value: value, message: ev.errorMessage };
+    } else {
+        return { value: value, message: validators[validator].defErrorMessage };
+    }
 }
 
-// Ð”Ð¾Ð±Ð°Ð²Ð»ÑÐµÑ‚ Ð²Ð°Ð»Ð¸Ð´Ð°Ñ‚Ð¾Ñ€ Ñ Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ð°Ð¼Ð¸.
+// Äîáàâëÿåò âàëèäàòîð ñ ïàðàìåòðàìè.
 
 function addValidator( element, validator, attrs ) {
-	if (attrs == null) {
-		attrs = true;
-	}
-	element[validator] = attrs;
-	
-	// Ð¢.Ðº. html Ð°Ñ‚Ñ‚Ñ€Ð¸Ð±ÑƒÑ‚Ñ‹ Ð±Ð¾Ð»ÐµÐµ Ð¿Ñ€Ð¸Ð¾Ñ€Ð¸Ñ‚ÐµÑ‚Ð½Ñ‹,
-	// Ñ‚Ð¾ Ð¿Ñ€Ð¸ Ð²Ñ‹Ð·Ð¾Ð²Ðµ ÑÑ‚Ð¾Ð¹ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸ Ð½ÐµÐ¾Ð±Ñ…Ð¾Ð´Ð¸Ð¼Ð¾ ÑƒÐ±Ñ€Ð°Ñ‚ÑŒ ÑÐ¾Ð¾Ñ‚Ð²ÐµÑÑ‚Ð²ÑƒÑŽÑ‰Ð¸Ð¹ html Ð°Ñ‚Ñ‚Ñ€Ð¸Ð±ÑƒÑ‚.
-	element.removeAttribute( validator );
+    if (attrs == null) {
+        attrs = true;
+    }
+    element[validator] = attrs;
+
+    // Ò.ê. html àòòðèáóòû áîëåå ïðèîðèòåòíû,
+    // òî ïðè âûçîâå ýòîé ôóíêöèè íåîáõîäèìî óáðàòü ñîîòâåñòâóþùèé html àòòðèáóò.
+    element.removeAttribute( validator );
 }
 
-// Ð¤ÑƒÐ½ÐºÑ†Ð¸Ñ Ð¿ÐµÑ€ÐµÐ±Ð¸Ñ€Ð°ÐµÑ‚ Ð²ÑÐµ Ð²Ð°Ð»Ð¸Ð´Ð°Ñ‚Ð¾Ñ€Ñ‹ Ð¸ ÐµÑÐ»Ð¸ Ð¾Ð½Ð° Ð½Ð°Ñ…Ð¾Ð´Ð¸Ñ‚ Ñƒ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð° Ð°Ñ‚Ñ‚Ñ€Ð¸Ð±ÑƒÑ‚ Ñ Ñ‚Ð°ÐºÐ¸Ð¼ Ð¶Ðµ Ð¸Ð¼ÐµÐ½ÐµÐ¼, Ñ‚Ð¾ Ð¿Ñ€Ð¸Ð¼ÐµÐ½ÑÐµÑ‚ Ð²Ð°Ð»Ð¸Ð´Ð°Ñ‚Ð¾Ñ€.
-// ÐŸÐ¾ÑÐ»Ðµ Ñ‡ÐµÐ³Ð¾ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÑ‚ Ð¾ÑˆÐ¸Ð±ÐºÐ¸ Ð²Ð°Ð»Ð¸Ð´Ð°Ñ†Ð¸Ð¸.
+// Ôóíêöèÿ ïåðåáèðàåò âñå âàëèäàòîðû è åñëè îíà íàõîäèò ó ýëåìåíòà àòòðèáóò ñ òàêèì æå èìåíåì, òî ïðèìåíÿåò âàëèäàòîð.
+// Ïîñëå ÷åãî âîçâðàùàåò îøèáêè âàëèäàöèè.
 function elementErrors( element ) {
-	var errors = [], i = 0;
-	for ( var validator in validators ) {
-		var e = validate( element, validator );
-		if (e != true) {
-			errors[i++] = e;
-		}
-	}
-	return errors;
+    var errors = [], i = 0;
+    for ( var validator in validators ) {
+        var e = validate( element, validator );
+        if (e != true) {
+            errors[i++] = e;
+        }
+    }
+    return errors;
 }
 
-// ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð° Ñ„Ð¾Ñ€Ð¼Ñ‹ Ð½Ð° Ð²Ð°Ð»Ð¸Ð´Ð½Ð¾ÑÑ‚ÑŒ.
+// Ïðîâåðêà ýëåìåíòà ôîðìû íà âàëèäíîñòü.
 function isValidElement( element ) {
-	for ( var validator in validators ) {
-		if (validate( element, validator ) != true) {
-			return false;
-		}
-	}
-	return true;
+    for ( var validator in validators ) {
+        if (validate( element, validator ) != true) {
+            return false;
+        }
+    }
+    return true;
 }
 
-// ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð²ÑÐµÐ¹ Ñ„Ð¾Ñ€Ð¼Ñ‹ Ð½Ð° Ð²Ð°Ð»Ð¸Ð´Ð½Ð¾ÑÑ‚ÑŒ.
+// Ïðîâåðêà âñåé ôîðìû íà âàëèäíîñòü.
 function isValidForm( form ) {
-	for (var i = 0; i < form.elements.length; i++) {
-		var e = form.elements[i];
-		if (!isValidElement( e )) {
-			return false;
-		}
-	}
-	return true;
+    for (var i = 0; i < form.elements.length; i++) {
+        var e = form.elements[i];
+        if (!isValidElement( e )) {
+            return false;
+        }
+    }
+    return true;
 }
 
-// Ð¤ÑƒÐ½ÐºÑ†Ð¸Ñ, ÐºÐ¾Ñ‚Ð¾Ñ€Ð°Ñ Ð²Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÐ¼ Ð²ÑÐµ Ð¾ÑˆÐ¸Ð±ÐºÐ¸ ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚Ð¾Ð² Ñ„Ð¾Ñ€Ð¼Ñ‹.
-// Ð’Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÑ‚ Ð¾Ð±ÑŠÐµÐºÑ‚ Ñ„Ð¾Ñ€Ð¼Ð°Ñ‚Ð°: 
+// Ôóíêöèÿ, êîòîðàÿ âîçâðàùàåì âñå îøèáêè ýëåìåíòîâ ôîðìû.
+// Âîçâðàùàåò îáúåêò ôîðìàòà:
 // {
 //  	'elementName1':'errorsArray1',
 //		'elementName2':'errorArray2',
 //	... }
 function formErrors( form ) {
-	errors = {};
-	for (var i = 0; i < form.elements.length; i++) {
-		var e = form.elements[i], es = elementErrors( e );
-		if (es.length > 0) {
-			errors[e.name] = es;
-		}
-	}
-	return errors;
+    errors = {};
+    for (var i = 0; i < form.elements.length; i++) {
+        var e = form.elements[i], es = elementErrors( e );
+        if (es.length > 0) {
+            errors[e.name] = es;
+        }
+    }
+    return errors;
 }

@@ -1,11 +1,17 @@
 <?php
-	$mysql_database="test_bd"; //Èìÿ áàçû äàííûõ
-	$mysql_username="root"; //Èìÿ ïîëüçîâàòåëÿ áàçû äàííûõ
-	$mysql_password=""; //Ïàðîëü ïîëüçîâàòåëÿ áàçû äàííûõ
-	$mysql_host="localhost"; //Ñåðâåð áàçû äàííûõ
-	//Ñîåäèíÿåìñÿ ñ áàçîé äàííûõ
-	$mysql_connect = mysql_connect ($mysql_host, $mysql_username, $mysql_password);
-	//Âûáèðàåì áàçó äàííûõ äëÿ ðàáîòû
-	mysql_select_db ($mysql_database);
-	//Óñòàíàâëèâàåì êîäèðîâêó äëÿ ñîåäèíåíèÿ áàçû äàííûõ
+	$mysql_database="test_db"; //Ð˜Ð¼Ñ Ð±Ð°Ð·Ñ‹ Ð´Ð°Ð½Ð½Ñ‹Ñ…
+	$mysql_username="root"; //Ð˜Ð¼Ñ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ Ð±Ð°Ð·Ñ‹ Ð´Ð°Ð½Ð½Ñ‹Ñ…
+	$mysql_password=""; //ÐŸÐ°Ñ€Ð¾Ð»ÑŒ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ Ð±Ð°Ð·Ñ‹ Ð´Ð°Ð½Ð½Ñ‹Ñ…
+	$mysql_host="localhost"; //Ð¡ÐµÑ€Ð²ÐµÑ€ Ð±Ð°Ð·Ñ‹ Ð´Ð°Ð½Ð½Ñ‹Ñ…
+	//Ð¡Ð¾ÐµÐ´Ð¸Ð½ÑÐµÐ¼ÑÑ Ñ Ð±Ð°Ð·Ð¾Ð¹ Ð´Ð°Ð½Ð½Ñ‹Ñ…
+	if (!$mysql_connect = mysql_connect ($mysql_host, $mysql_username, $mysql_password)) {
+            echo 'ÐžÑˆÐ¸Ð±ÐºÐ° ÑÐ¾ÐµÐ´Ð¸Ð½ÐµÐ½Ð¸Ñ';
+        }
+	//Ð’Ñ‹Ð±Ð¸Ñ€Ð°ÐµÐ¼ Ð±Ð°Ð·Ñƒ Ð´Ð°Ð½Ð½Ñ‹Ñ… Ð´Ð»Ñ Ñ€Ð°Ð±Ð¾Ñ‚Ñ‹
+	if (!mysql_select_db ($mysql_database)) {
+            echo 'ÐžÑˆÐ¸Ð±ÐºÐ° Ð²Ñ‹Ð±Ð¾Ñ€Ð° Ð‘Ð”';
+        }
+	//Ð£ÑÑ‚Ð°Ð½Ð°Ð²Ð»Ð¸Ð²Ð°ÐµÐ¼ ÐºÐ¾Ð´Ð¸Ñ€Ð¾Ð²ÐºÑƒ Ð´Ð»Ñ ÑÐ¾ÐµÐ´Ð¸Ð½ÐµÐ½Ð¸Ñ Ð±Ð°Ð·Ñ‹ Ð´Ð°Ð½Ð½Ñ‹Ñ…
 	mysql_query ("SET NAMES UTF-8");
+
+?>
