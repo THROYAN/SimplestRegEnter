@@ -19,12 +19,12 @@
 
 #user-panel a:visited , #user-panel a:link {
     color: black;
-    text-decoration: none;
+    #text-decoration: none;
 }
 
 #user-panel:hover a:visited, #user-panel:hover a:link {
     color: #aaa;
-    text-decoration: none;
+    #text-decoration: none;
 }
 
 .dialog {

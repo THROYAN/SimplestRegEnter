@@ -1,4 +1,4 @@
-// Возвращает новый объект XHR
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ РЅРѕРІС‹Р№ РѕР±СЉРµРєС‚ XHR
 function newXHR() {
     var xhrObj;
     if (window.XMLHttpRequest) {// IE7+, Firefox, Chrome, Opera, Safari
@@ -8,43 +8,47 @@ function newXHR() {
     {// IE6, IE5
         try {
             xhrObj=new ActiveXObject("Microsoft.xhrObj");
-        } catch(e) { // не поддерживается AJAX
+        } catch(e) { // РЅРµ РїРѕРґРґРµСЂР¶РёРІР°РµС‚СЃСЏ AJAX
             return null;
         }
     }
     return xhrObj;
 }
 
-// Отправка POST запроса
-// url - адрес
-// data - параметры в виде объекта {`param`: `value`, ... }
-// callback - функция-обработчик запроса
-// errorCallback - фукнция-обработчик ошибки запроса
+// РћС‚РїСЂР°РІРєР° POST Р·Р°РїСЂРѕСЃР°
+// url - Р°РґСЂРµСЃ
+// data - РїР°СЂР°РјРµС‚СЂС‹ РІ РІРёРґРµ РѕР±СЉРµРєС‚Р° {`param`: `value`, ... }
+// callback - С„СѓРЅРєС†РёСЏ-РѕР±СЂР°Р±РѕС‚С‡РёРє Р·Р°РїСЂРѕСЃР°
+// errorCallback - С„СѓРєРЅС†РёСЏ-РѕР±СЂР°Р±РѕС‚С‡РёРє РѕС€РёР±РєРё Р·Р°РїСЂРѕСЃР°
 function post( url, data, callback, errorCallback, elseUrl ) {
     var xhrObj = newXHR();
 
-    // если не поддерживается ajax, то переходим на саму страницу
+    // РµСЃР»Рё РЅРµ РїРѕРґРґРµСЂР¶РёРІР°РµС‚СЃСЏ ajax, С‚Рѕ РїРµСЂРµС…РѕРґРёРј РЅР° СЃР°РјСѓ СЃС‚СЂР°РЅРёС†Сѓ
     if (xhrObj == null) {
 
     }
 
     xhrObj.onreadystatechange = function() {
         if (xhrObj.readyState==4) {
-            if (xhrObj.status==200) { // если запрос успешно отправлен
+            if (xhrObj.status==200) { // РµСЃР»Рё Р·Р°РїСЂРѕСЃ СѓСЃРїРµС€РЅРѕ РѕС‚РїСЂР°РІР»РµРЅ
+
                 if (callback != null) {
                     callback( JSONToObj(xhrObj.responseText) );
                 }
-            } else { // если произошла ошибка
+
+            } else { // РµСЃР»Рё РїСЂРѕРёР·РѕС€Р»Р° РѕС€РёР±РєР°
+
                 if (errorCallback != null) {
                     errorCallback( xhrObj.responseText );
                 }
+
             }
         }
     };
 
     var paramsString = '';
     if (data != null) {
-        // переводим параметр data в строку, чтобы передать через post
+        // РїРµСЂРµРІРѕРґРёРј РїР°СЂР°РјРµС‚СЂ data РІ СЃС‚СЂРѕРєСѓ, С‡С‚РѕР±С‹ РїРµСЂРµРґР°С‚СЊ С‡РµСЂРµР· post
         paramsString = 'data=' + objToString( data );
     }
 
@@ -54,20 +58,20 @@ function post( url, data, callback, errorCallback, elseUrl ) {
     return paramsString;
 }
 
-// переводит объект js в строку, которую потом можно будет декодировать
-// с помощью php json_decode.
+// РїРµСЂРµРІРѕРґРёС‚ РѕР±СЉРµРєС‚ js РІ СЃС‚СЂРѕРєСѓ, РєРѕС‚РѕСЂСѓСЋ РїРѕС‚РѕРј РјРѕР¶РЅРѕ Р±СѓРґРµС‚ РґРµРєРѕРґРёСЂРѕРІР°С‚СЊ
+// СЃ РїРѕРјРѕС‰СЊСЋ php json_decode.
 function objToString( obj ) {
     var s = '';
-    if (typeof obj === 'object') { // если это объект, то рекурсивно применяем эту функцию к его свойствам.
+    if (typeof obj === 'object') { // РµСЃР»Рё СЌС‚Рѕ РѕР±СЉРµРєС‚, С‚Рѕ СЂРµРєСѓСЂСЃРёРІРЅРѕ РїСЂРёРјРµРЅСЏРµРј СЌС‚Сѓ С„СѓРЅРєС†РёСЋ Рє РµРіРѕ СЃРІРѕР№СЃС‚РІР°Рј.
         s += '{';
         for (var i in obj) {
             s += '"{0}":{1},'.format(i, objToString(obj[i]));
         }
-        // обрезаем последнюю запятую
+        // РѕР±СЂРµР·Р°РµРј РїРѕСЃР»РµРґРЅСЋСЋ Р·Р°РїСЏС‚СѓСЋ
         s = s.substr(0, s.length - 1);
         s += '}';
-    } else { // если это не объект, то просто переводим его в строку.
-        if (typeof obj === 'string') { // если строка, то добавляем ковычки.
+    } else { // РµСЃР»Рё СЌС‚Рѕ РЅРµ РѕР±СЉРµРєС‚, С‚Рѕ РїСЂРѕСЃС‚Рѕ РїРµСЂРµРІРѕРґРёРј РµРіРѕ РІ СЃС‚СЂРѕРєСѓ.
+        if (typeof obj === 'string') { // РµСЃР»Рё СЃС‚СЂРѕРєР°, С‚Рѕ РґРѕР±Р°РІР»СЏРµРј РєРѕРІС‹С‡РєРё.
             s = '"{0}"'.format(obj.toString());
         } else {
             s = obj.toString();
@@ -77,6 +81,11 @@ function objToString( obj ) {
 }
 
 function JSONToObj( json ) {
+
+    if (json == null || json == '') {
+        return null;
+    }
+
     eval('var res = ' + json);
     return res;
 }

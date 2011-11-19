@@ -1,4 +1,4 @@
-<?php session_start(); ?>
+<?php session_start(); header("Content-Type: text/html;charset=utf-8"); ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -19,16 +19,17 @@
 
 	<div class="user-panel" id="user-panel">
             <?php if (isset ($_SESSION['user-data'])) { ?>
-                <span>Привет, <?= $_SESSION['user-data']['name'] ?></span>
+                Привет, <span><?= $_SESSION['user-data']['name'] ?></span>|
+                <a onclick="exit()" href="#">Выйти</a>
             <?php } else { ?>
-		<a onclick="enter()" href="#">Enter</a>|
-		<a onclick="reg()" href="#">Register</a>
+		<a onclick="enter_click()" href="#">Войти</a>|
+		<a onclick="reg_click()" href="#">Регистрация</a>
             <?php } ?>
 	</div>
 
 	<div id="enter-dialog" class="dialog" style="display: none">
 		<div id="enter-caption" class="dialog-caption">Please enter your email and password</div>
-		<form id="enter-form" action="" onsubmit="checkPassword();return false;" method="POST">
+		<form id="enter-form" action="" onsubmit="enter();return false;" method="POST">
 
 			<table>
 				<tr>
@@ -48,7 +49,7 @@
 	<div id="reg-dialog" class="dialog" style="display: none">
 		<div id="reg-caption" class="dialog-caption">Please enter your information</div>
 		<!-- Устанавливаем для формы аттрибут novalidate чтобы отключить HTML5 валидацию -->
-                <form id="reg-form" action="" onsubmit="checkRegFields();return false;" method="POST" novalidate>
+                <form id="reg-form" action="" onsubmit="reg();return false;" method="POST" novalidate>
 
 			<table>
 				<tr>

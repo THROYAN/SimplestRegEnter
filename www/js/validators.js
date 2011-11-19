@@ -1,4 +1,4 @@
-// Перечень стандартных валидаторов.
+// РџРµСЂРµС‡РµРЅСЊ СЃС‚Р°РЅРґР°СЂС‚РЅС‹С… РІР°Р»РёРґР°С‚РѕСЂРѕРІ.
 var validators = {
     'required': {
         isValid: function( e ) {
@@ -8,7 +8,7 @@ var validators = {
     },
     'email': {
         isValid: function( e ) {
-            // e.value = e.value.replace(/^\s+|\s+$/g, ''); // удаляем пробелы
+            // e.value = e.value.replace(/^\s+|\s+$/g, ''); // СѓРґР°Р»СЏРµРј РїСЂРѕР±РµР»С‹
             return (/^([a-z0-9_\-]+\.)*[a-z0-9_\-]+@([a-z0-9][a-z0-9\-]*[a-z0-9]\.)+[a-z]{2,4}$/i).test(e.value);
         },
         defErrorMessage: 'Invalid email address'
@@ -39,13 +39,13 @@ var validators = {
     }
 }
 
-// фукнция для выполнения одного валидатора на элементе.
+// С„СѓРєРЅС†РёСЏ РґР»СЏ РІС‹РїРѕР»РЅРµРЅРёСЏ РѕРґРЅРѕРіРѕ РІР°Р»РёРґР°С‚РѕСЂР° РЅР° СЌР»РµРјРµРЅС‚Рµ.
 function validate( e, validator ) {
     var ev = getValidator( e, validator );
 
     if ( ev != null ) {
 
-        // проверяем валидатор, если он не проходит, то возвращаем сообщение об ошибке.
+        // РїСЂРѕРІРµСЂСЏРµРј РІР°Р»РёРґР°С‚РѕСЂ, РµСЃР»Рё РѕРЅ РЅРµ РїСЂРѕС…РѕРґРёС‚, С‚Рѕ РІРѕР·РІСЂР°С‰Р°РµРј СЃРѕРѕР±С‰РµРЅРёРµ РѕР± РѕС€РёР±РєРµ.
         if ( !validators[validator].isValid( e, ev.value ) ) {
             return ev.message.format(ev.value);
         }
@@ -53,10 +53,10 @@ function validate( e, validator ) {
     return true;
 }
 
-// Возвращает параметры валидатора конкретного элемента.
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ РїР°СЂР°РјРµС‚СЂС‹ РІР°Р»РёРґР°С‚РѕСЂР° РєРѕРЅРєСЂРµС‚РЅРѕРіРѕ СЌР»РµРјРµРЅС‚Р°.
 function getValidator( element, validator ) {
-    // Допускается валидация в виде addValidator(element, 'minLength', {value = 16, errorMessage = 'Длина должна быть не меньше {0}' });
-    // или в виде html аттрибутов.
+    // Р”РѕРїСѓСЃРєР°РµС‚СЃСЏ РІР°Р»РёРґР°С†РёСЏ РІ РІРёРґРµ addValidator(element, 'minLength', {value = 16, errorMessage = 'Р”Р»РёРЅР° РґРѕР»Р¶РЅР° Р±С‹С‚СЊ РЅРµ РјРµРЅСЊС€Рµ {0}' });
+    // РёР»Рё РІ РІРёРґРµ html Р°С‚С‚СЂРёР±СѓС‚РѕРІ.
     var ev = element.getAttribute(validator);
     if (ev == null) {
         ev = element[validator];
@@ -71,8 +71,8 @@ function getValidator( element, validator ) {
         value = ev.value;
     }
 
-    // возвращаем либо сообщение об ошибке по-умолчанию,
-    // либо то, которое мы указали в методе addValidator
+    // РІРѕР·РІСЂР°С‰Р°РµРј Р»РёР±Рѕ СЃРѕРѕР±С‰РµРЅРёРµ РѕР± РѕС€РёР±РєРµ РїРѕ-СѓРјРѕР»С‡Р°РЅРёСЋ,
+    // Р»РёР±Рѕ С‚Рѕ, РєРѕС‚РѕСЂРѕРµ РјС‹ СѓРєР°Р·Р°Р»Рё РІ РјРµС‚РѕРґРµ addValidator
     if( ev.errorMessage != null ) {
         return { value: value, message: ev.errorMessage };
     } else {
@@ -80,7 +80,7 @@ function getValidator( element, validator ) {
     }
 }
 
-// Добавляет валидатор с параметрами.
+// Р”РѕР±Р°РІР»СЏРµС‚ РІР°Р»РёРґР°С‚РѕСЂ СЃ РїР°СЂР°РјРµС‚СЂР°РјРё.
 
 function addValidator( element, validator, attrs ) {
     if (attrs == null) {
@@ -88,13 +88,13 @@ function addValidator( element, validator, attrs ) {
     }
     element[validator] = attrs;
 
-    // Т.к. html аттрибуты более приоритетны,
-    // то при вызове этой функции необходимо убрать соотвествующий html аттрибут.
+    // Рў.Рє. html Р°С‚С‚СЂРёР±СѓС‚С‹ Р±РѕР»РµРµ РїСЂРёРѕСЂРёС‚РµС‚РЅС‹,
+    // С‚Рѕ РїСЂРё РІС‹Р·РѕРІРµ СЌС‚РѕР№ С„СѓРЅРєС†РёРё РЅРµРѕР±С…РѕРґРёРјРѕ СѓР±СЂР°С‚СЊ СЃРѕРѕС‚РІРµСЃС‚РІСѓСЋС‰РёР№ html Р°С‚С‚СЂРёР±СѓС‚.
     element.removeAttribute( validator );
 }
 
-// Функция перебирает все валидаторы и если она находит у элемента аттрибут с таким же именем, то применяет валидатор.
-// После чего возвращает ошибки валидации.
+// Р¤СѓРЅРєС†РёСЏ РїРµСЂРµР±РёСЂР°РµС‚ РІСЃРµ РІР°Р»РёРґР°С‚РѕСЂС‹ Рё РµСЃР»Рё РѕРЅР° РЅР°С…РѕРґРёС‚ Сѓ СЌР»РµРјРµРЅС‚Р° Р°С‚С‚СЂРёР±СѓС‚ СЃ С‚Р°РєРёРј Р¶Рµ РёРјРµРЅРµРј, С‚Рѕ РїСЂРёРјРµРЅСЏРµС‚ РІР°Р»РёРґР°С‚РѕСЂ.
+// РџРѕСЃР»Рµ С‡РµРіРѕ РІРѕР·РІСЂР°С‰Р°РµС‚ РѕС€РёР±РєРё РІР°Р»РёРґР°С†РёРё.
 function elementErrors( element ) {
     var errors = [], i = 0;
     for ( var validator in validators ) {
@@ -106,7 +106,7 @@ function elementErrors( element ) {
     return errors;
 }
 
-// Проверка элемента формы на валидность.
+// РџСЂРѕРІРµСЂРєР° СЌР»РµРјРµРЅС‚Р° С„РѕСЂРјС‹ РЅР° РІР°Р»РёРґРЅРѕСЃС‚СЊ.
 function isValidElement( element ) {
     for ( var validator in validators ) {
         if (validate( element, validator ) != true) {
@@ -116,7 +116,7 @@ function isValidElement( element ) {
     return true;
 }
 
-// Проверка всей формы на валидность.
+// РџСЂРѕРІРµСЂРєР° РІСЃРµР№ С„РѕСЂРјС‹ РЅР° РІР°Р»РёРґРЅРѕСЃС‚СЊ.
 function isValidForm( form ) {
     for (var i = 0; i < form.elements.length; i++) {
         var e = form.elements[i];
@@ -127,8 +127,8 @@ function isValidForm( form ) {
     return true;
 }
 
-// Функция, которая возвращаем все ошибки элементов формы.
-// Возвращает объект формата:
+// Р¤СѓРЅРєС†РёСЏ, РєРѕС‚РѕСЂР°СЏ РІРѕР·РІСЂР°С‰Р°РµРј РІСЃРµ РѕС€РёР±РєРё СЌР»РµРјРµРЅС‚РѕРІ С„РѕСЂРјС‹.
+// Р’РѕР·РІСЂР°С‰Р°РµС‚ РѕР±СЉРµРєС‚ С„РѕСЂРјР°С‚Р°:
 // {
 //  	'elementName1':'errorsArray1',
 //		'elementName2':'errorArray2',

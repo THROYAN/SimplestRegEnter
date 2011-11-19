@@ -9,12 +9,13 @@
 
     switch( $action )
     {
+        // Регистрация
         case 'reg':
 
             // обновить страничку, если пользователь регистрируется, уже зайдя на сайт.
             if (isset($_SESSION['user-data'])) {
-                //exit;
-                echo '1; location.href = location.href;';
+                echo '1; window.location.reload();';
+                exit;
             }
             $userData = $data->userData;
 
@@ -24,11 +25,15 @@
 
             echo json_encode( $result );
             break;
+
+        // Вход пользователя
         case 'enter':
 
+            // если пользователь зашел, то ему незачем заходить еще.
             if (isset($_SESSION['user-data'])) {
-                //exit;
-                echo '1; location.href = location.href;';
+                // обновление страницы...
+                echo '1; window.location.reload();';
+                exit;
             }
 
             $email = $data->email;
@@ -38,8 +43,16 @@
             // получаем пользователя по email'у и паролю
             $result = $user->getByEmailAndPassword($email, $password);
 
+            if ($result != null) {
+                // если всё хорошо, сохраняем пользователя в сессии
+                $_SESSION['user-data'] = array(
+                    'id' => $result['id'],
+                    'name' => $result['name']
+                );
+            }
+
             echo json_encode(
-                    $result != null ? array( // если функция вернула пользователяы
+                    $result != null ? array( // если функция вернула пользователя
                                 'status' => 'succesful',
                                 'message' => 'Добро пожаловать '.$result['name'],
                                 'user' => $result
@@ -51,6 +64,18 @@
             );
 
             break;
+
+        // Выход пользователя
+        case 'exit':
+
+            unset($_SESSION['user-data']);
+
+            // обновление страницы...
+            //echo '1; window.location.reload();';
+
+            break;
+
+        // Если передан не правильный action
         default:
             echo json_encode( array(
                                 'status' => 'action error',
