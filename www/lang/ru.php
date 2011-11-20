@@ -36,7 +36,20 @@
         'Information loading...' => 'Информация загружается...',
         'User was nor found' => 'Пользователь не найден',
         'Choose avatar' => 'Выберите аватар',
-        'Browse' => 'Обзор'
-    );
+        'Browse' => 'Обзор',
 
+        'Invalid email adress' => 'Неверный формат email адреса',
+        'Name must be not lesser then {0} symbols' => 'Имя должно быть не короче {0} символов',
+        'Field can\'t be empty' => 'Поле не может быть пустым',
+        'Minimum possible length is {0}' => 'Минимально допустимая длина равна {0}',
+        'Maximum possible length is {0}' => 'Максимально допустимая длина равна {0}',
+        'This field must starts with alpha' => 'Поле должно начинаться с буквы',
+        'Value must be equals with \'{0}\' field' => 'Значение должно совпадать со значением поля \'{0}\'',
+        'Invalid days count at this month' => 'Неверное количество дней в выбранном месяце',
+        'File is not a valid image file' => 'Файл не является файлом изображением',
+        'Passwords must be the same' => 'Пароли должны совпадать',
+        'Thank you for register' => 'Вы успешно зарегестрировались',
+        'Table already have {0} with value {1}' => 'Такой {0} уже существует',
+        'Invalid email or password' => 'Не правильный email или пароль'
+   );
 ?>

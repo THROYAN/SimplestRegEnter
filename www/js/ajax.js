@@ -75,25 +75,41 @@ function objToString( obj ) {
             var temp_s = (obj.toString() + '').replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0'); // и экранируем слеши
             s = '"{0}"'.format(temp_s);
             //s = '"{0}"'.format(obj.toString());
-        } else {
+        } else if(obj != null) {
             s = obj.toString();
+        } else {
+            s = 'null';
         }
     }
     return s;
 }
 
+// Функция переводит строку JSON в объект
 function JSONToObj( json ) {
 
     if (json == null || json == '') {
         return null;
     }
-
-    eval('var res = ' + json);
-    return res;
+    try{
+        eval('var res = ' + json);
+        return res;
+    } catch(e) {
+        return json;
+    }
 }
 
-function prepareFile( inputElement, callback ) {
+// Подготовка файла к ajax передаче
+// Функция копирует файл в /system/temp/ и возвращает на него ссылку
+// После работы с файлом необходимо его удалить!
+function prepareFile( inputElement, callback, accessNoFile ) {
 
+    // если файл пустой и это разрешено, то просто вызвать обработчик
+    if ( (accessNoFile == null || accessNoFile) && (inputElement.value == '' || inputElement.value == null)) {
+        callback();
+        return;
+    }
+
+    // суть функции в создании невидимого фрейма с формой,
     var form = document.createElement('form');
     form.method = 'POST';
     form.id = 'get-file-form';
@@ -105,6 +121,8 @@ function prepareFile( inputElement, callback ) {
 
     inputElement.name = 'file';
     var parent = inputElement.parentNode;
+
+    // на которую переносится input:file элемент
     parent.removeChild(inputElement);
 
     form.appendChild(inputElement);
@@ -120,14 +138,19 @@ function prepareFile( inputElement, callback ) {
     var frameBody = frame.contentWindow ? frame.contentWindow.document.body : frame.contentDocument.document.body;
     frameBody.appendChild(form);
 
+    // и программно форма сабмитится
     form.submit();
+    // после чего всё возвращается на место
     inputElement.name = tempName;
     form.removeChild(inputElement);
     parent.appendChild(inputElement);
 
     frame.onload = function() {
         frameBody = frame.contentWindow ? frame.contentWindow.document.body : frame.contentDocument.document.body;
+
+        // ответ выводится в самом фрейме в виде JSON
         callback( JSONToObj(frameBody.innerHTML) );
+        // и удаляем фрейм
         document.body.removeChild(frame);
     }
 }

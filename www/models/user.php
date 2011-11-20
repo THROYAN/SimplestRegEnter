@@ -1,6 +1,6 @@
 <?php
     require_once '../system/connect_to_db.php';
-    require '../system/mysql_tools.php';
+    require_once '../system/mysql_tools.php';
 
     /**
      * Класс для создания, загрузки и валидации пользователей.
@@ -12,13 +12,13 @@
 
         // Сообщения об ошибках
         // Можно заменять своими
-        public $EXISTS_ERROR_MESSAGE = 'Table already have {0} with value {1}';
-        public $MIN_LENGTH_ERROR_MESSAGE = '{0}\'s length must not be lesser then {1}';
-        public $MAX_LENGTH_ERROR_MESSAGE = '{0}\'s length must not be greater then {1}';
-        public $NULL_ERROR_MESSAGE = '{0}\'s value can\'t be empty';
-        public $EMAIL_ERROR_MESSAGE = '{0} is not a valid email adress';
-        public $FIRST_ALPHA_ERROR_MESSAGE = '{0} must begin from alpha';
-        public $DATE_ERROR_MESSAGE = 'Date {0} is invalid';
+        public $EXISTS_ERROR_MESSAGE = 'Table already have with value {1}';
+        public $MIN_LENGTH_ERROR_MESSAGE = 'Minimum possible length is {0}';
+        public $MAX_LENGTH_ERROR_MESSAGE = 'Maximum possible length is {0}';
+        public $NULL_ERROR_MESSAGE = 'Field can\'t be empty';
+        public $EMAIL_ERROR_MESSAGE = 'Invalid email adress';
+        public $FIRST_ALPHA_ERROR_MESSAGE = 'This field must starts with alpha';
+        public $DATE_ERROR_MESSAGE = 'Invalid days count at this month';
 
         /**
          * Имя таблицы пользователей
@@ -151,8 +151,10 @@
                 $userData = (object)$this->serialize();
             }
 
+            // проверяем поля на валидность
             $e = $this->isValid( $userData );
 
+            // если произошли какие-либо ошибки, то возвращаем их и не создаём пользователя
             if ( is_array($e) ) {
                 return array(
                     'status' => 'error',
@@ -160,9 +162,11 @@
                 );
             }
 
+            // сохранение пользователя в БД
             query('INSERT INTO '.User::table.
                     '(email, password, name, birth, registered)
-                    VALUES("{0}", MD5("{1}"), "{2}", "{3}", NOW())',
+                    VALUES("{0}", MD5("{1}"), "{2}", '.($userData->birth == 'NULL' ? '{3}' : '"{3}"')
+                    .', NOW())',
                 $userData->email,
                 $userData->password,
                 $userData->name,
@@ -172,7 +176,7 @@
 
             return array(
                 'status' => 'succesful',
-                'message' => 'Вы успешно зарегестрировались',
+                'message' => trans('Thank you for register'),
                 'user' => $this->serialize()
             );
         }
@@ -195,12 +199,12 @@
 
                 // является ли правильным email адресом
                 if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
-                    $errors['email'][] = format($this->EMAIL_ERROR_MESSAGE, $value);
+                    $errors['email'][] = format(trans($this->EMAIL_ERROR_MESSAGE), $value);
                 }
 
                 // существует ли уже в таблице
                 if ($this->isExists('email', $value)) {
-                    $errors['email'][] = format($this->EXISTS_ERROR_MESSAGE, 'email', $value);
+                    $errors['email'][] = format(trans($this->EXISTS_ERROR_MESSAGE), 'email', $value);
                 }
 
             // isValid(name)
@@ -210,15 +214,15 @@
 
                 // проверяем длину
                 if (strlen($value) < $minLength) {
-                    $errors['name'][] = format($this->MIN_LENGTH_ERROR_MESSAGE, $value, $minLength);
+                    $errors['name'][] = format(trans($this->MIN_LENGTH_ERROR_MESSAGE), $minLength);
                 }
                 if (strlen($value) > $maxLength) {
-                    $errors['name'][] = format($this->MAX_LENGTH_ERROR_MESSAGE, $value, $maxLength);
+                    $errors['name'][] = format(trans($this->MAX_LENGTH_ERROR_MESSAGE), $maxLength);
                 }
 
                 // начинается ли с буквы
                 if (!preg_match('/^[a-zа-я]+/i', $value)) {
-                    $errors['name'][] = format($this->FIRST_ALPHA_ERROR_MESSAGE, 'name');
+                    $errors['name'][] = format(trans($this->FIRST_ALPHA_ERROR_MESSAGE), 'name');
                 }
 
             // isValid(birth)
@@ -226,9 +230,9 @@
 
             $temp = split('-', $value);
 
-                // проверяем дату
-                if (!checkdate((int)$temp[1], (int)$temp[2], (int)$temp[0])) {
-                    $errors['birth-day'][] = format($this->DATE_ERROR_MESSAGE, $value);
+                // проверяем дату, если введён хотябы день
+                if ($temp[2] != '' && !checkdate((int)$temp[1], (int)$temp[2], (int)$temp[0])) {
+                    $errors['birth-day'][] = format(trans($this->DATE_ERROR_MESSAGE), $value);
                 }
 
             return $errors != array() ? $errors : true;
@@ -265,7 +269,7 @@
                 'email' => $this->email,
                 'birth' => $this->birth,
                 'password' => $this->password,
-                'avatar' => $this->getAvatarPath()
+                'avatar' => $this->getAvatar()
             );
         }
 
@@ -284,9 +288,17 @@
 
         }
 
+        /**
+         * Загрузка на сервер аватарки пользователя.
+         *
+         * @param StdClass $image Объект, хранящий ссылку и имя картинки
+         * @param int $id Идентификатор пользователя
+         * @return boolean
+         */
         public function uploadAvatar( $image, $id = null ) {
+            // проверка расширения файла
             if (!in_array( strtolower(end(explode(".", $image->name))), array('gif','png','jpg'))) {
-                return $image->name;
+                return false;
             }
 
             if ($id == null) {
@@ -294,25 +306,35 @@
             }
 
             // файл получается в виде id.ext, где ext - расширение исходного файла
-            return rename($image->tmp_name, User::AVATARS_PATH . $id .'.'. end(explode(".", $image->name))) ?
-                    $image->tmp_name : 'FUUUCK';
+            return copy($image->tmp_name, User::AVATARS_PATH . $id .'.'. end(explode(".", $image->name))) ?
+                    true : false;
         }
 
-        public function getAvatarPath( $id = null ) {
+        /**
+         * Функция возвращает ссылку на аватарку пользователя.
+         *
+         * @param int $id
+         * @return string
+         */
+        public function getAvatar( $id = null ) {
             if ($id == null) {
                 $id = $this->id;
             }
 
+            // поиск в папке с аватарками
             $dir = opendir(User::AVATARS_PATH);
             while (gettype($file=readdir($dir)) != 'boolean')
             {
+                // ищем файл, который имеет имя $id и одно из допустимых расширений.
                 if ($file != "." && $file != ".." && preg_match("/".$id.".(jpg|png|gif)$/i",$file))
                 {
+                    closedir($dir);
                     return User::AVATARS_PATH.$file;
                 }
             }
             closedir($dir);
 
+            // если не найдена вернуть аватаку по-умолчанию
             return User::AVATARS_PATH.User::DEF_AVATAR;
         }
 

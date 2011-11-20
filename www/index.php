@@ -2,8 +2,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
-<?php require_once 'lang/ru.php'; // файл для перевода
-      require_once 'lang/lang.php'; // файл выбранного языка ?>
+<?php   require_once 'system/config.php';
+        require_once 'lang/lang.php'; // файл перевода
+
+        if (is_file('lang/'.$lang_name.'.php'))
+            require_once 'lang/'.$lang_name.'.php';; // файл выбранного языка ?>
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -14,14 +17,15 @@
     <script type="text/javascript">
         // скрипт для использования перевода в скриптах
         function trans(text) {
-            return lang[text] == null ? text : lang[text];
+            return typeof lang == 'undefined' || lang[text] == null ? text : lang[text];
         }
-
+    <?php if (isset($lang)) { ?>
         var lang = {
             <?php foreach($lang as $key => $value) { ?>
                     <?= '"'.$key.'": "'.$value.'",' ?>
             <?php } ?>
         };
+    <?php } ?>
     </script>
 
     <script type="text/javascript" src="js/common.js"></script>
@@ -55,8 +59,8 @@
                     <td><?= trans('Password') ?></td><td><input required name="password" type="password"/></td>
                 </tr>
             </table>
-            <input type="submit" value="<?= trans('OK') ?>" />
-            <button onclick="hide($('enter-dialog'))"><?= trans('Cancel') ?></button>
+            <input type="submit" value="<?= trans('Enter') ?>" />
+            <input type="button" value ="<?= trans('Cancel') ?>" onclick="hide($('enter-dialog'))"/>
 
         </form>
 
@@ -85,7 +89,7 @@
                     <td id="birth">
                         <table>
                             <tr>
-                                <td class="label"><?= trans('Day') ?>:</td><td><input required name='birth-day' isMonthDay="birth-month" size="2" type="text"/></td>
+                                <td class="label"><?= trans('Day') ?>:</td><td><input name='birth-day' isMonthDay="birth-month" size="2" type="text"/></td>
                             </tr>
                             <tr>
                                 <td class="label"><?= trans('Month') ?>:</td>
@@ -106,7 +110,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="label"><?= trans('Choose avatar') ?> </td>
+                    <td class="label"><?= trans('Choose avatar') ?>:</td>
                     <td><input type="file" name="image" isImage accept="image/jpeg,image/gif,image/x-png" title="<?= trans('Browse') ?>..."/></td>
                 </tr>
             </table>

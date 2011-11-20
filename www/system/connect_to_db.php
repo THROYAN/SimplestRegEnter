@@ -1,5 +1,5 @@
 <?php
-	$mysql_database="test_db"; //Имя базы данных
+	$mysql_database=$db_name; //Имя базы данных
 	$mysql_username="root"; //Имя пользователя базы данных
 	$mysql_password=""; //Пароль пользователя базы данных
 	$mysql_host="localhost"; //Сервер базы данных

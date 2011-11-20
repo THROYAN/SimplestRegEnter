@@ -1,56 +1,66 @@
 // Перечень стандартных валидаторов.
 var validators = {
-    'required': {
+    'required': { // поле обязательно для заполнения
         isValid: function( e ) {
             return e.value != null && e.value.length > 0;
         },
-        defErrorMessage: 'Field can\'t be empty'
+        defErrorMessage: trans('Field can\'t be empty')
     },
-    'email': {
+    'email': { // поле является email адресом
         isValid: function( e ) {
             // e.value = e.value.replace(/^\s+|\s+$/g, ''); // удаляем пробелы
             return (/^([a-z0-9_\-]+\.)*[a-z0-9_\-]+@([a-z0-9][a-z0-9\-]*[a-z0-9]\.)+[a-z]{2,4}$/i).test(e.value);
         },
-        defErrorMessage: 'Invalid email address'
+        defErrorMessage: trans('Invalid email address')
     },
-    'minLength': {
+    'minLength': { // минимальная допустимая длина
         isValid: function( e, minLength ) {
             return e.value.length >= parseInt( minLength );
         },
-        defErrorMessage: 'Minimum possible length is {0}'
+        defErrorMessage: trans('Minimum possible length is {0}')
     },
-    'maxLength': {
+    'maxLength': { // максимально допустимая длина
         isValid: function( e, maxLength ) {
             return e.value.length <= parseInt( maxLength );
         },
-        defErrorMessage: 'Maximum possible length is {0}'
+        defErrorMessage: trans('Maximum possible length is {0}')
     },
-    'startsWithAlpha': {
+    'startsWithAlpha': { // поле начинается с буквы
         isValid: function( e ) {
             return (/^[a-z]+/i).test(e.value);
         },
-        defErrorMessage: 'This field must starts with alpha'
+        defErrorMessage: trans('This field must starts with alpha')
     },
-    'equals': {
+    'equals': { // указывает, что поле должно быть равно другому полю в этой же форме
         isValid: function( e, otherField ) {
             return e.value == e.form.elements[otherField].value;
         },
-        defErrorMessage: 'Value must be equals with \'{0}\' field'
+        defErrorMessage: trans('Value must be equals with \'{0}\' field')
     },
-    'isMonthDay': {
+    'isMonthDay': { // проверка на правильное количество дней в соответствующем месяце
+                    // месяц выбирается с помощью select, начиная со 2 элемента
         isValid: function( e, monthField ) {
                 // количество дней должно соотвествовать выбранному месяцу
             return (e.value <= monthes[e.form.elements[monthField].selectedIndex - 1] && e.value >= 0) ||
                 // либо может быть не выбран ниодин месяц и день
                 (e.form.elements[monthField].selectedIndex == 0 && e.value == '');
         },
-        defErrorMessage: 'Invalid days count at this month'
+        defErrorMessage: trans('Invalid days count at this month')
     },
-    'isImage': {
+    'isImage': { // проверка расширения файла на расширения допустимых изображений
         isValid: function( e ) {
-            return (/(\.gif|\.jpg|\.png)$/i).test(e.value);
+            // либо картинка, либо ничего
+            // чтобы картинка точно была, необходимо еще использовать unique
+            return e.value == null || e.value == '' || (/(\.gif|\.jpg|\.png)$/i).test(e.value);
         },
-        defErrorMessage: 'File is not a valid image file'
+        defErrorMessage: trans('File is not a valid image file')
+    }
+}
+
+// заглушка, если вдруг не используется перевод
+if( typeof lang == 'undefined' ) {
+    trans = function(text) {
+        return text;
     }
 }
 
@@ -79,7 +89,7 @@ function getValidator( element, validator ) {
 
     if (ev == null || typeof ev == 'undefined' || (ev == false && typeof ev == 'boolean') ) {
 
-        return;
+        return null;
     }
 
 

@@ -18,8 +18,8 @@ function refreshPositions() {
 function setValidators() {
     var form = $('reg-form');
 
-    addValidator( form.email, 'email', {errorMessage: 'Неверный формат email адреса'} );
-    addValidator( form.name, 'minLength', {value: 4, errorMessage: 'Имя должно быть не короче {0} символов'});
+    addValidator( form.name, 'minLength', {value: 4, errorMessage: trans('Name must be not lesser then {0} symbols')});
+    addValidator( form['re-type-password'], 'equals', {value: 'password', errorMessage: trans('Passwords must be the same')});
 }
 
 // Свернуть reg диалог и свернуть/показать enter диалог
@@ -59,25 +59,27 @@ function reg() {
         }
     } else {
 
+        var birth = form['birth-day'].value != null && form['birth-day'].value != ''
+                                ? '{2}-{1}-{0}'.format(
+                                    form['birth-day'].value,
+                                    form['birth-month'].selectedIndex,
+                                    form['birth-year'].value
+                                ) : 'NULL';
+
         var userData = {
             email: form.email.value,
             name: form.name.value,
             password: form.password.value,
-            birth: '{2}-{1}-{0}'.format(
-                                    form['birth-day'].value,
-                                    form['birth-month'].selectedIndex,
-                                    form['birth-year'].value
-                                )
+            birth: birth
         };
 
         // приготавливаем файл к копированию
         prepareFile(form.image, function(file){
-            alert(file.tmp_name)
+
             // запрос на регистрацию
             post( '/controllers/users.php', {'action': 'reg', 'userData': userData, 'image': file}, function( data ){
                 if (data.status == 'succesful') { // если всё прошло успешно
 
-                    alert(data.imageAdding);
                     popupHint( $('reg-caption'), data.message); // выдаём об этом сообщение
                     setTimeout(function(){
                         $('enter-form').email.value = form.email.value;
