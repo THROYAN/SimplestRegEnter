@@ -42,10 +42,10 @@
 }
 
 .popup-hint {
-    #border: solid 1px #aaa;
-    #background-color: #ccc;
+    border: solid 1px #aaa;
+    background-color: #ccc;
 }
-.popup-hint-left {
+/*.popup-hint-left {
     padding-left: 13px;
     background-image: url(/images/cloud_left.gif);
 }
@@ -56,8 +56,16 @@
 }
 .popup-hint-middle {
     background-image: url(/images/cloud_middle.gif);
-}
+}*/
 
 .error-message {
     color: red;
+}
+
+#reg-table tr td {
+    text-align: left;
+}
+
+#reg-table tr td.label {
+    text-align: right;
 }

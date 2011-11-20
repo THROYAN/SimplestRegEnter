@@ -8,12 +8,13 @@
     class User {
 
         // Сообщения об ошибках
-        const EXISTS_ERROR_MESSAGE = 'Table already have {0} with value {1}';
-        const MIN_LENGTH_ERROR_MESSAGE = '{0}\'s length must not be lesser then {1}';
-        const MAX_LENGTH_ERROR_MESSAGE = '{0}\'s length must not be greater then {1}';
-        const NULL_ERROR_MESSAGE = '{0}\'s value can\'t be empty';
-        const EMAIL_ERROR_MESSAGE = '{0} is not a valid email adress';
-        const FIRST_ALPHA_ERROR_MESSAGE = '{0} must begin from alpha';
+        static $EXISTS_ERROR_MESSAGE = 'Table already have {0} with value {1}';
+        static $MIN_LENGTH_ERROR_MESSAGE = '{0}\'s length must not be lesser then {1}';
+        static $MAX_LENGTH_ERROR_MESSAGE = '{0}\'s length must not be greater then {1}';
+        static $NULL_ERROR_MESSAGE = '{0}\'s value can\'t be empty';
+        static $EMAIL_ERROR_MESSAGE = '{0} is not a valid email adress';
+        static $FIRST_ALPHA_ERROR_MESSAGE = '{0} must begin from alpha';
+        static $DATE_ERROR_MESSAGE = 'Date {0} is invalid';
 
         /**
          * Имя таблицы пользователей
@@ -157,7 +158,7 @@
 
             query('INSERT INTO '.User::table.
                     '(email, password, name, birth, registered)
-                    VALUES("{0}", MD5("{1}"), "{2}", {3}, NOW())',
+                    VALUES("{0}", MD5("{1}"), "{2}", "{3}", NOW())',
                 $userData->email,
                 $userData->password,
                 $userData->name,
@@ -214,6 +215,16 @@
                 // начинается ли с буквы
                 if (!preg_match('/^[a-zа-я]+/i', $value)) {
                     $errors['name'][] = format(User::FIRST_ALPHA_ERROR_MESSAGE, 'name');
+                }
+
+            // isValid(birth)
+            $value = $userData->birth;
+
+            $temp = split('-', $value);
+
+                // проверяем дату
+                if (!checkdate((int)$temp[1], (int)$temp[2], (int)$temp[0])) {
+                    $errors['birth-day'][] = format(User::$DATE_ERROR_MESSAGE, $value);
                 }
 
             return $errors != array() ? $errors : true;

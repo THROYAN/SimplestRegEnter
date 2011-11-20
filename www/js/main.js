@@ -43,16 +43,31 @@ function reg() {
 
     if (!isValidForm(form)) { // проверка полей формы на валидность
         var errors = formErrors( form );
+
+        // переменая, используемая только для того, что словить только первую ошибку
+        var i = 0;
         for (var e in errors) {
             // вывод по одной ошибке для каждого поля с ошибкой
             popupHint( form.elements[e], errors[e][0], 'error-message', 1000 );
+
+            // для первой ошибки устанавливаем курсор на нужный элемент
+            if( i++ == 0) {
+                form.elements[e].select();
+                form.elements[e].focus();
+            }
+
         }
     } else {
 
         var userData = {
             email: form.email.value,
             name: form.name.value,
-            password: form.password.value
+            password: form.password.value,
+            birth: '{2}-{1}-{0}'.format(
+                                    form['birth-day'].value,
+                                    form['birth-month'].selectedIndex,
+                                    form['birth-year'].value
+                                )
         };
 
         // запрос на регистрацию
@@ -65,8 +80,16 @@ function reg() {
                     enter_click(); // и переходим к входу
                 }, 1000);
             } else { // если были ошибки
+
+                var i = 0;
                 for (var e in data.errors) { // то выводим их точно также, как и выше
                     popupHint( form.elements[e], data.errors[e][0], 'error-message', 1000 );
+
+                    // для первой ошибки устанавливаем курсор на нужный элемент
+                    if( i++ == 0) {
+                        form.elements[e].select();
+                        form.elements[e].focus();
+                    }
                 }
             }
         });
@@ -80,8 +103,16 @@ function enter() {
 
     if (!isValidForm(form)) { // проверяем форму на валидность
         var errors = formErrors( form );
+
+        var i = 0;
         for (var e in errors) { // выводим ошибки
             popupHint( form.elements[e], errors[e][0], 'error-message', 1000 );
+
+            // для первой ошибки устанавливаем курсор на нужный элемент
+            if( i++ == 0) {
+                form.elements[e].select();
+                form.elements[e].focus();
+            }
         }
         return;
     }
@@ -95,8 +126,12 @@ function enter() {
                     hide($('enter-dialog'));
                     window.location.reload(); // обновляем страницу
                 }, 1000);
-        } else {
+        } else { // выводим ошибку
             popupHint( form.password, data.message );
+
+            // устанавливаем курсор на password поле для удобства
+            form.password.select();
+            form.password.focus();
         }
     });
 }
@@ -110,16 +145,30 @@ function exit() {
 
 }
 
+// Вывод 'страницы' профиля пользователя
 function profile_click() {
-    dialog = $('profile-dialog')
+    dialog = $('profile-dialog');
+
+    if (dialog == null) {
+        return;
+    }
+
     toggle(dialog);
+
+    if (isHidden(dialog))
+        return;
 
     post('/controllers/users.php', {'action': 'profile'}, function(data) {
         if (data.status == 'succesful') {
-
-            dialog.removeChild($('stuff'));
+            if ($('stuff') != null) {
+                dialog.removeChild($('stuff'));
+            }
+            if ($('profile-table')) {
+                dialog.removeChild($('profile-table'));
+            }
 
             var table = document.createElement('table');
+            table.id = 'profile-table'
             var tr = document.createElement('tr');
             var td = document.createElement('td');
             td.innerHTML = trans('Name') + ":";
@@ -147,7 +196,6 @@ function profile_click() {
             tr.appendChild(td);
             table.appendChild(tr);
 
-
             table.appendChild(tr);
 
             dialog.appendChild(table);
@@ -161,4 +209,14 @@ function profile_click() {
             $('stuff').innerHTML = trans('User was nor found');
         }
     });
+}
+
+function loadYears() {
+    select = $('year-select');
+
+    for(var i = 1930;i <= 2005;i++) {
+        var op =document.createElement('option');
+        op.innerHTML = i;
+        select.appendChild(op);
+    }
 }

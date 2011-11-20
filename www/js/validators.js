@@ -36,6 +36,21 @@ var validators = {
             return e.value == e.form.elements[otherField].value;
         },
         defErrorMessage: 'Value must be equals with \'{0}\' field'
+    },
+    'isMonthDay': {
+        isValid: function( e, monthField ) {
+                // количество дней должно соотвествовать выбранному месяцу
+            return (e.value <= monthes[e.form.elements[monthField].selectedIndex - 1] && e.value >= 0) ||
+                // либо может быть не выбран ниодин месяц и день
+                (e.form.elements[monthField].selectedIndex == 0 && e.value == '');
+        },
+        defErrorMessage: 'Invalid days count at this month'
+    },
+    'isImage': {
+        isValid: function( e ) {
+            return e.value.match(/(\.gif|\.jpg|\.png)$/i);
+        },
+        defErrorMessage: 'File is not a valid image file'
     }
 }
 
@@ -145,3 +160,5 @@ function formErrors( form ) {
     }
     return errors;
 }
+
+var monthes = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];

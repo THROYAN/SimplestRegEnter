@@ -34,7 +34,9 @@
 
         'User information' => 'Информация о пользователе',
         'Information loading...' => 'Информация загружается...',
-        'User was nor found' => 'Пользователь не найден'
+        'User was nor found' => 'Пользователь не найден',
+        'Choose avatar' => 'Выберите аватар',
+        'Browse' => 'Обзор'
     );
 
 ?>
