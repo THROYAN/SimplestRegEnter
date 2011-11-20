@@ -85,7 +85,7 @@ function JSONToObj( json ) {
     if (json == null || json == '') {
         return null;
     }
-
+    
     eval('var res = ' + json);
     return res;
 }

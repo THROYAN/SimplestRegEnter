@@ -75,6 +75,29 @@
 
             break;
 
+        // Загрузка профиля пользователя
+        case 'profile':
+
+            $id = $data->{'id'};
+
+            if ($id == null) {
+                $id = $_SESSION['user-data']['id'];
+            }
+
+            if ($id == null) {
+                exit;
+            }
+
+            $user = new User( $id );
+            $user->load();
+
+            echo json_encode( array(
+                'status' => 'succesful',
+                'user' => $user->serialize()
+            ));
+
+            break;
+
         // Если передан не правильный action
         default:
             echo json_encode( array(
