@@ -48,7 +48,7 @@ var validators = {
     },
     'isImage': {
         isValid: function( e ) {
-            return e.value.match(/(\.gif|\.jpg|\.png)$/i);
+            return (/(\.gif|\.jpg|\.png)$/i).test(e.value);
         },
         defErrorMessage: 'File is not a valid image file'
     }

@@ -70,28 +70,34 @@ function reg() {
                                 )
         };
 
-        // запрос на регистрацию
-        post( '/controllers/users.php', {'action': 'reg', 'userData': userData}, function( data ){
-            if (data.status == 'succesful') { // если всё прошло успешно
-                popupHint( $('reg-caption'), data.message); // выдаём об этом сообщение
-                setTimeout(function(){
-                    $('enter-form').email.value = form.email.value;
-                    form.reset();
-                    enter_click(); // и переходим к входу
-                }, 1000);
-            } else { // если были ошибки
+        // приготавливаем файл к копированию
+        prepareFile(form.image, function(file){
+            alert(file.tmp_name)
+            // запрос на регистрацию
+            post( '/controllers/users.php', {'action': 'reg', 'userData': userData, 'image': file}, function( data ){
+                if (data.status == 'succesful') { // если всё прошло успешно
 
-                var i = 0;
-                for (var e in data.errors) { // то выводим их точно также, как и выше
-                    popupHint( form.elements[e], data.errors[e][0], 'error-message', 1000 );
+                    alert(data.imageAdding);
+                    popupHint( $('reg-caption'), data.message); // выдаём об этом сообщение
+                    setTimeout(function(){
+                        $('enter-form').email.value = form.email.value;
+                        form.reset();
+                        enter_click(); // и переходим к входу
+                    }, 1000);
+                } else { // если были ошибки
 
-                    // для первой ошибки устанавливаем курсор на нужный элемент
-                    if( i++ == 0) {
-                        form.elements[e].select();
-                        form.elements[e].focus();
+                    var i = 0;
+                    for (var e in data.errors) { // то выводим их точно также, как и выше
+                        popupHint( form.elements[e], data.errors[e][0], 'error-message', 1000 );
+
+                        // для первой ошибки устанавливаем курсор на нужный элемент
+                        if( i++ == 0) {
+                            form.elements[e].select();
+                            form.elements[e].focus();
+                        }
                     }
                 }
-            }
+            });
         });
     }
 }
@@ -171,6 +177,15 @@ function profile_click() {
             table.id = 'profile-table'
             var tr = document.createElement('tr');
             var td = document.createElement('td');
+            // На 1 больше, чтобы вся информация выводилась вверху
+            td.setAttribute('rowspan', 4);
+            var image = new Image();
+            image.src = data.user.avatar;
+            image.className = 'avatar-image';
+            td.appendChild(image);
+            tr.appendChild(td);
+
+            td = document.createElement('td');
             td.innerHTML = trans('Name') + ":";
             tr.appendChild(td);
             td = document.createElement('td');

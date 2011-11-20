@@ -7,14 +7,18 @@
      */
     class User {
 
+        const AVATARS_PATH = '../images/avatars/';
+        const DEF_AVATAR ='noavatar.png';
+
         // Сообщения об ошибках
-        static $EXISTS_ERROR_MESSAGE = 'Table already have {0} with value {1}';
-        static $MIN_LENGTH_ERROR_MESSAGE = '{0}\'s length must not be lesser then {1}';
-        static $MAX_LENGTH_ERROR_MESSAGE = '{0}\'s length must not be greater then {1}';
-        static $NULL_ERROR_MESSAGE = '{0}\'s value can\'t be empty';
-        static $EMAIL_ERROR_MESSAGE = '{0} is not a valid email adress';
-        static $FIRST_ALPHA_ERROR_MESSAGE = '{0} must begin from alpha';
-        static $DATE_ERROR_MESSAGE = 'Date {0} is invalid';
+        // Можно заменять своими
+        public $EXISTS_ERROR_MESSAGE = 'Table already have {0} with value {1}';
+        public $MIN_LENGTH_ERROR_MESSAGE = '{0}\'s length must not be lesser then {1}';
+        public $MAX_LENGTH_ERROR_MESSAGE = '{0}\'s length must not be greater then {1}';
+        public $NULL_ERROR_MESSAGE = '{0}\'s value can\'t be empty';
+        public $EMAIL_ERROR_MESSAGE = '{0} is not a valid email adress';
+        public $FIRST_ALPHA_ERROR_MESSAGE = '{0} must begin from alpha';
+        public $DATE_ERROR_MESSAGE = 'Date {0} is invalid';
 
         /**
          * Имя таблицы пользователей
@@ -191,12 +195,12 @@
 
                 // является ли правильным email адресом
                 if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
-                    $errors['email'][] = format(User::EMAIL_ERROR_MESSAGE, $value);
+                    $errors['email'][] = format($this->EMAIL_ERROR_MESSAGE, $value);
                 }
 
                 // существует ли уже в таблице
                 if ($this->isExists('email', $value)) {
-                    $errors['email'][] = format(User::EXISTS_ERROR_MESSAGE, 'email', $value);
+                    $errors['email'][] = format($this->EXISTS_ERROR_MESSAGE, 'email', $value);
                 }
 
             // isValid(name)
@@ -206,15 +210,15 @@
 
                 // проверяем длину
                 if (strlen($value) < $minLength) {
-                    $errors['name'][] = format(User::MIN_LENGTH_ERROR_MESSAGE, $value, $minLength);
+                    $errors['name'][] = format($this->MIN_LENGTH_ERROR_MESSAGE, $value, $minLength);
                 }
                 if (strlen($value) > $maxLength) {
-                    $errors['name'][] = format(User::MAX_LENGTH_ERROR_MESSAGE, $value, $maxLength);
+                    $errors['name'][] = format($this->MAX_LENGTH_ERROR_MESSAGE, $value, $maxLength);
                 }
 
                 // начинается ли с буквы
                 if (!preg_match('/^[a-zа-я]+/i', $value)) {
-                    $errors['name'][] = format(User::FIRST_ALPHA_ERROR_MESSAGE, 'name');
+                    $errors['name'][] = format($this->FIRST_ALPHA_ERROR_MESSAGE, 'name');
                 }
 
             // isValid(birth)
@@ -224,7 +228,7 @@
 
                 // проверяем дату
                 if (!checkdate((int)$temp[1], (int)$temp[2], (int)$temp[0])) {
-                    $errors['birth-day'][] = format(User::$DATE_ERROR_MESSAGE, $value);
+                    $errors['birth-day'][] = format($this->DATE_ERROR_MESSAGE, $value);
                 }
 
             return $errors != array() ? $errors : true;
@@ -256,10 +260,12 @@
          */
         public function serialize() {
             return array(
+                'id' => $this->id,
                 'name' => $this->name,
                 'email' => $this->email,
                 'birth' => $this->birth,
-                'password' => $this->password
+                'password' => $this->password,
+                'avatar' => $this->getAvatarPath()
             );
         }
 
@@ -276,6 +282,38 @@
             $this->password = $userData->password;
             $this->birth = $userData->birth;
 
+        }
+
+        public function uploadAvatar( $image, $id = null ) {
+            if (!in_array( strtolower(end(explode(".", $image->name))), array('gif','png','jpg'))) {
+                return $image->name;
+            }
+
+            if ($id == null) {
+                $id = $this->id;
+            }
+
+            // файл получается в виде id.ext, где ext - расширение исходного файла
+            return rename($image->tmp_name, User::AVATARS_PATH . $id .'.'. end(explode(".", $image->name))) ?
+                    $image->tmp_name : 'FUUUCK';
+        }
+
+        public function getAvatarPath( $id = null ) {
+            if ($id == null) {
+                $id = $this->id;
+            }
+
+            $dir = opendir(User::AVATARS_PATH);
+            while (gettype($file=readdir($dir)) != 'boolean')
+            {
+                if ($file != "." && $file != ".." && preg_match("/".$id.".(jpg|png|gif)$/i",$file))
+                {
+                    return User::AVATARS_PATH.$file;
+                }
+            }
+            closedir($dir);
+
+            return User::AVATARS_PATH.User::DEF_AVATAR;
         }
 
     }

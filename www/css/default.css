@@ -69,3 +69,8 @@
 #reg-table tr td.label {
     text-align: right;
 }
+
+.avatar-image {
+    max-height: 300px;
+    max-width: 300px;
+}

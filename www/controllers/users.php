@@ -23,6 +23,9 @@
             // пробуем создать пользователя
             $result = $user->create($userData);
 
+            // загружаем аватар, если изображение не правильное функция вернёт false
+            $result['imageAdding'] = $user->uploadAvatar($data->image);
+
             echo json_encode( $result );
             break;
 
@@ -104,7 +107,8 @@
                                 'status' => 'action error',
                                 'message' => 'Invalid action '.$action.' in Users controller',
                                 'data' => $data,
-                                'action' => $action
+                                'action' => $action,
+                                'post params' => $_POST['data']
             ));
             break;
     }

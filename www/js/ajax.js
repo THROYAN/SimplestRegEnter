@@ -49,7 +49,7 @@ function post( url, data, callback, errorCallback, elseUrl ) {
     var paramsString = '';
     if (data != null) {
         // переводим параметр data в строку, чтобы передать через post
-        paramsString = 'data=' + objToString( data );
+        paramsString = 'data={0}'.format(objToString( data ));
     }
 
     xhrObj.open("POST", url, true);
@@ -72,7 +72,9 @@ function objToString( obj ) {
         s += '}';
     } else { // если это не объект, то просто переводим его в строку.
         if (typeof obj === 'string') { // если строка, то добавляем ковычки.
-            s = '"{0}"'.format(obj.toString());
+            var temp_s = (obj.toString() + '').replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0'); // и экранируем слеши
+            s = '"{0}"'.format(temp_s);
+            //s = '"{0}"'.format(obj.toString());
         } else {
             s = obj.toString();
         }
@@ -85,7 +87,47 @@ function JSONToObj( json ) {
     if (json == null || json == '') {
         return null;
     }
-    
+
     eval('var res = ' + json);
     return res;
+}
+
+function prepareFile( inputElement, callback ) {
+
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.id = 'get-file-form';
+    form.action = '/system/getfilename.php';
+    form.setAttribute('enctype', 'multipart/form-data')
+    form.style.display = 'none';
+
+    var tempName = inputElement.name;
+
+    inputElement.name = 'file';
+    var parent = inputElement.parentNode;
+    parent.removeChild(inputElement);
+
+    form.appendChild(inputElement);
+
+    var frame = document.createElement('iframe');
+
+    frame.id = 'get-file-frame';
+    frame.src = 'javascript:false'
+    frame.style.display = "none";
+
+    document.body.appendChild(frame);
+
+    var frameBody = frame.contentWindow ? frame.contentWindow.document.body : frame.contentDocument.document.body;
+    frameBody.appendChild(form);
+
+    form.submit();
+    inputElement.name = tempName;
+    form.removeChild(inputElement);
+    parent.appendChild(inputElement);
+
+    frame.onload = function() {
+        frameBody = frame.contentWindow ? frame.contentWindow.document.body : frame.contentDocument.document.body;
+        callback( JSONToObj(frameBody.innerHTML) );
+        document.body.removeChild(frame);
+    }
 }

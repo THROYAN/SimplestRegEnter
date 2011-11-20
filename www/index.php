@@ -107,7 +107,7 @@
                 </tr>
                 <tr>
                     <td class="label"><?= trans('Choose avatar') ?> </td>
-                    <td><input type="file" name="avatar" isImage accept="image/jpeg,image/gif,image/x-png" title="<?= trans('Browse') ?>..."/></td>
+                    <td><input type="file" name="image" isImage accept="image/jpeg,image/gif,image/x-png" title="<?= trans('Browse') ?>..."/></td>
                 </tr>
             </table>
             <input type="submit" value="<?= trans('OK') ?>">
