@@ -32,6 +32,11 @@
             // загружаем аватар, если изображение не правильное функция вернёт false
             $result['imageAdding'] = $user->uploadAvatar($data->image);
 
+            // удаляем временный файл
+            if( $data->image != null ) {
+                unlink($data->image->tmp_name);
+            }
+
             echo json_encode( $result );
             break;
 
